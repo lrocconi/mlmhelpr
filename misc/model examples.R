@@ -133,11 +133,25 @@ model13_reml <- lmer(gpa ~ 1 + occas + (1 + occas|student), data=gpa, REML=T)
 model14_ml <- lmer(gpa ~ 1 + occas + job + sex + highgpa + sex:occas + highgpa:occas + (1 + occas|student), data=gpa, REML=F)
 model14_reml <- lmer(gpa ~ 1 + occas + job + sex + highgpa + sex:occas + highgpa:occas + (1 + occas|student), data=gpa, REML=T)
 
+# correlated random effects
+
+model15_ml <- lmer(Reaction ~ 1 + Days + (1 + Days|Subject), sleepstudy, REML=F)
+model15_reml <- lmer(Reaction ~ 1 + Days + (1 + Days|Subject), sleepstudy, REML=T)
+
 # logistic models ----
 # Unconditional Model
 
 # note: failed convergence
-model15 <- glmer(rep1 ~ 1 + (1|schoolid), family=binomial, data=uthai)
-model16 <- glmer(rep1 ~ 1 + (1|schoolid), family=binomial, data=uthai, nAGQ = 10)
+model16 <- glmer(rep1 ~ 1 + (1|schoolid), family=binomial, data=uthai)
+model17 <- glmer(rep1 ~ 1 + (1|schoolid), family=binomial, data=uthai, nAGQ = 10)
 
-# cross classified models
+# cross classified models ----
+
+# simple cross-classified from Bates
+model18_ml <- lmer(diameter ~ 1 + (1|plate) + (1|sample), Penicillin, REML = F)
+model18_reml <- lmer(diameter ~ 1 + (1|plate) + (1|sample), Penicillin, REML = T)
+
+# partial crossed from Bates
+
+model19_ml <- lmer(y ~ 1 + (1|s) + (1|d)+(1|dept:service), InstEval, REML=F)
+model19_reml <- lmer(y ~ 1 + (1|s) + (1|d)+(1|dept:service), InstEval, REML=T)
