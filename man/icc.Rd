@@ -28,5 +28,6 @@ icc(fit)
 {
 \insertRef{hox2018}{mlmhemlpr}
 \insertRef{kreft2002}{mlmhemlpr}
+\insertRef{snijders2012}{mlmhemlpr}
 }
 }
