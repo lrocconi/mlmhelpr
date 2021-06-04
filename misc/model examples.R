@@ -1,7 +1,7 @@
 library(haven)
 library(tidyverse)
 library(lme4)
-load("models.Rdata") # loads everything below
+load("misc/models.Rdata") # loads everything below
 
 # load high school and beyond data ---
 hsb <- haven::read_spss("data-raw/HSB.sav")
