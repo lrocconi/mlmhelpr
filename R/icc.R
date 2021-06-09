@@ -60,12 +60,13 @@ icc <- function(x) {
 
   iccs <- (data.frame(grps, icc=round(icc,3)))
 
-  # print
-  return(iccs)
   # for models with random slopes
   if(sum(!is.na(varcorr_df$var2)) > 0)
   {message("Warning: Random slopes detected! Interpret with caution.\n
            See ?mlmhelpr::icc() for more information.")}
+
+  # print
+  return(iccs)
 }
 
 ## testing ----
