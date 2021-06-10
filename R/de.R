@@ -9,14 +9,26 @@ de <- function(x) {
 
   # To ease things, maybe add an argument for the cluster variable you want the design effect for???
 
-  N = nrow(x@frame)
-  k = x@Gp[[2]] # This doesn't work for more than 2 levels, only grabs level-2 N. Need to loop maybe??
-  nc = N/k
-  md = median(table(getME(x, "flist"))) #This doesn't work for more than 2 levels
+# Compute counts at each level as well as average and median cluster size
+  N <- nrow(x@frame)
+  nclust <- length(ngrps(x))
+  k <- lme4::ngrps(x)
+  nc <- vector()
+  md <- vector()
 
-  icc <- function(x) {
+  for (i in 1:nclust) {
+    nc[i] = N/k[i]
+    md[i] = median(table(getME(x, "flist")[[i]]))
+      }
 
-    varcorr_df <- as.data.frame(lme4::VarCorr(x))
+  k <- as.data.frame(k)
+  k$grp <- rownames(k)
+  k$nc <- nc
+  k$md <- md
+
+
+ # Compute ICC
+  varcorr_df <- as.data.frame(lme4::VarCorr(x))
 
     # this creates full grp names ----
     varcorr_df$name <- ifelse(is.na(varcorr_df$var1),
@@ -47,15 +59,18 @@ de <- function(x) {
       icc <- rbind(icc, grp[i])
     }
 
-    iccs <- (data.frame(grps, icc=icc))
-    return(iccs)
-  }
+    df <- merge(varcorr_df, k, by="grp", all.x=TRUE)
+    df$icc <- icc
 
-icc_de <- icc(x)
+    df$de <- 1 + (df$nc - 1) * df$icc
+  # df$de <- 1 + (md - 1) * df$icc #using median
 
-   icc_de$de <- 1 + (nc - 1) * icc_de$icc
 
-  return(head(icc_de, nrow(icc_de)-1))
+df2 <- data.frame(name=df$name, k=df$k, nc=df$nc, icc=df$icc, de=df$de)
+
+# df2 <- data.frame(name=df$name, k=df$k, nc=df$md, icc=df$icc, de=df$de) #for median
+
+   return(head(df2, nrow(df2)-1)) #implement a dynamic way to cut out extra row if there is a random slope??
 
 
   # if(lme4::getME(x, "m") > 1)
