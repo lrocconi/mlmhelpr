@@ -2,9 +2,9 @@
 #'
 #' @param x A model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
-#' @description DESCRIPTION
+#' @description The ICC function calculates the intraclass correlation (ICC) for multilevel models. The ICC represents the proportion of group-level variance to total variance. The ICC can be calculated for two or more levels in random-intercept models [@hox2018].
 #'
-#' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (2002), "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 74). However, Snijders and Bosker (YEAR) offer a calculation to derive this value (equation 7.9). This equation is implemented here.
+#' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (2002), "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 74). However, Snijders and Bosker (2012) offer a calculation to derive this value (equation 7.9). This equation is implemented here.
 #'
 #'
 #' @return A data frame with random effects and their intraclass correlations.
