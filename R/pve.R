@@ -27,6 +27,7 @@ pve <- function(model1, model2, verbose=T) {
   if(nobs(model1) != nobs(model2)){
     stop("Models were not all fitted to the same size of dataset. Models must be nested.")}
 
+  # TODO do we need a three-level check?
 
   # level-2 variance explained ----
     # get variance components
