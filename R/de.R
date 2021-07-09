@@ -1,24 +1,20 @@
-de <- function(x) {
+de <- function(x, median = FALSE) {
 
   # DE = 1 + (nc-1)*ICC, where nc is the number of individuals in each cluster.
   # If all cluster sizes are equal, this is easy. If cluster sizes are not equal, the usual option is to
   # compute the average cluster size (i.e., N/k, where N is level-1 sample size and k is cluster size).
   # Another option is to use the median cluster size
 
-  # ADD warning, if model includes a random slope or predictor variables
-
-  # To ease things, maybe add an argument for the cluster variable you want the design effect for???
-
 # Compute counts at each level as well as average and median cluster size
   N <- nrow(x@frame)
-  nclust <- length(ngrps(x))
+  nclust <- length(lme4::ngrps(x))
   k <- lme4::ngrps(x)
   nc <- vector()
   md <- vector()
 
   for (i in 1:nclust) {
     nc[i] = N/k[i]
-    md[i] = median(table(getME(x, "flist")[[i]]))
+    md[i] = median(table(lme4::getME(x, "flist")[[i]]))
       }
 
   k <- as.data.frame(k)
@@ -62,25 +58,27 @@ de <- function(x) {
     df <- merge(varcorr_df, k, by="grp", all.x=TRUE)
     df$icc <- icc
 
-    df$de <- 1 + (df$nc - 1) * df$icc
-  # df$de <- 1 + (md - 1) * df$icc #using median
+    if (median == TRUE) {
+      df$de <- 1 + (md - 1) * df$icc #using median
+    } else {
+      df$de <- 1 + (df$nc - 1) * df$icc
+    }
 
+    if (median == TRUE) {
+      df2 <- data.frame(name=df$name, k=df$k, nc=df$md, icc=df$icc, de=df$de) #for median
+    } else {
+      df2 <- data.frame(name=df$name, k=df$k, nc=df$nc, icc=df$icc, de=df$de)
+    }
 
-df2 <- data.frame(name=df$name, k=df$k, nc=df$nc, icc=df$icc, de=df$de)
+   if(lme4::getME(x, "m") > 1)
+   {message("Warning: Random slopes detected! Interpret with caution.\n
+            See ?mlmhelpr::de() for more information.")}
 
-# df2 <- data.frame(name=df$name, k=df$k, nc=df$md, icc=df$icc, de=df$de) #for median
-
-   return(head(df2, nrow(df2)-1)) #implement a dynamic way to cut out extra row if there is a random slope??
-
-
-  # if(lme4::getME(x, "m") > 1)
-  # {message("Warning: Random slopes detected! Interpret with caution.\n
-  #          See ?mlmhelpr::icc() for more information.")}
-  #
-
+   #return(head(df2, nrow(df2)-1))
+    return(df2[df2$name != "Residual", ])
 }
 
-de(model0_ml)
+de(model0_ml, median=T)
 
 de(model0_reml)
 
