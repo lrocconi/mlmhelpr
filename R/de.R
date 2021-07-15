@@ -1,3 +1,26 @@
+#' Design Effect
+#'
+#' @param A model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
+#'
+#'
+#' @description The design effect estimates the difference between the variance of an observed sample and a similar simple random sample. In the multilevel modeling context, this can be used to determine whether clustering introduces negative bias and whether the assumption of independence is held. Thus, it can help determine whether multilevel modeling is appropriate for a given data set. The calculations are based on @hox2018 and uses the `mlmhelpr:icc` function. A rule of thumb is that design effects smaller than 2 indicates multilevel modelling is not necessary; however, this is dependent on cluster size and other factors [@lai2015].
+#'
+#'
+#' @return
+#'
+#' @references{
+#'   \insertRef{hox2018}{mlmhemlpr}
+#'   \insertRef{lai2015}{mlmhemlpr}
+#' }
+#'
+#' @importFrom lme4 ngrps getME
+#'
+#' @examples
+#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=T)
+#'
+#' de(fit)
+
 de <- function(x) {
 
   # DE = 1 + (nc-1)*ICC, where nc is the number of individuals in each cluster.
@@ -11,14 +34,14 @@ de <- function(x) {
 
 # Compute counts at each level as well as average and median cluster size
   N <- nrow(x@frame)
-  nclust <- length(ngrps(x))
+  nclust <- length(lme4::ngrps(x))
   k <- lme4::ngrps(x)
   nc <- vector()
   md <- vector()
 
   for (i in 1:nclust) {
     nc[i] = N/k[i]
-    md[i] = median(table(getME(x, "flist")[[i]]))
+    md[i] = median(table(lme4::getME(x, "flist")[[i]]))
       }
 
   k <- as.data.frame(k)
@@ -66,7 +89,11 @@ de <- function(x) {
   # df$de <- 1 + (md - 1) * df$icc #using median
 
 
-df2 <- data.frame(name=df$name, k=df$k, nc=df$nc, icc=df$icc, de=df$de)
+df2 <- data.frame(cluster_var=df$name,
+                  groups=df$k,
+                  avg_group_size=df$nc,
+                  icc=df$icc,
+                  design_effect=df$de)
 
 # df2 <- data.frame(name=df$name, k=df$k, nc=df$md, icc=df$icc, de=df$de) #for median
 
@@ -80,6 +107,9 @@ df2 <- data.frame(name=df$name, k=df$k, nc=df$nc, icc=df$icc, de=df$de)
 
 }
 
+load("misc/models.Rdata")
+
+icc(model0_ml)
 de(model0_ml)
 
 de(model0_reml)
