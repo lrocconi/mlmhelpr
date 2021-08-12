@@ -105,7 +105,7 @@ de <- function(x, median = FALSE) {
     df2 <- data.frame(cluster_name=df$name,
                       n_of_clusters=df$k,
                       avg_cluster_size=df$nc,
-                      icc=rounddf$icc,
+                      icc=df$icc,
                       design_effect=df$de)
   }
 
