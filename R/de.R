@@ -7,7 +7,7 @@
 #'
 #' @description The design effect estimates the difference between the variance of an observed sample and a similar simple random sample. In the multilevel modeling context, this can be used to determine whether clustering introduces negative bias and whether the assumption of independence is held. Thus, it can help determine whether multilevel modeling is appropriate for a given data set. The calculations are based on @hox2018 and uses the `mlmhelpr:icc` function. A rule of thumb is that design effects smaller than 2 indicates multilevel modelling is not necessary; however, this is dependent on cluster size and other factors [@lai2015].
 #'
-#' NOTE ABOUT RANDOM SLOPES
+#' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (2002), "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 74). Since the intra-class correlation is part of the design effect calcuation, caution is advised when interpreting models with random slopes.
 #'
 #'
 #' @return a data frame containing the cluster variable, number of clusters, average (or median) cluster size, intraclass correlation, and the design effect
@@ -105,7 +105,7 @@ de <- function(x, median = FALSE) {
     df2 <- data.frame(cluster_name=df$name,
                       n_of_clusters=df$k,
                       avg_cluster_size=df$nc,
-                      icc=df$icc,
+                      icc=rounddf$icc,
                       design_effect=df$de)
   }
 
@@ -115,10 +115,15 @@ de <- function(x, median = FALSE) {
 
   #return(head(df2, nrow(df2)-1))
   return(df2[df2$cluster_name != "Residual", ])
+
 }
 
 de(model0_ml, median=T)
+de(model0_ml)
 
 de(model0_reml)
 
 de(model7_ml)
+
+
+
