@@ -1,11 +1,31 @@
 Package: mlmhelpr
-Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Multilevel/Mixed Model Helper Functions
+Version: 0.1
+Authors@R: 
+    c(person(given = "Louis",
+             family = "Rocconi",
+             role = c("aut", "cre"),
+             email = "lrocconi@utk.edu",
+             comment = c(ORCID = "0000-0003-0693-0957")),
+      person(given = "Anthony",
+             family = "Schmidt",
+             role = "aut",
+             email = "aschmi11@utk.edi",
+             comment = c(ORCID = "0000-0003-4478-0638")))
+Description: TBD
+License: MIT
+URL: https://github.com/lrocconi/mlmhelpr
+BugReports: https://github.com/lrocconi/mlmhelpr/issues
+Depends:
+    R (>= 2.10)
+Imports:
+    lme4
+Suggests: 
+Enhances:
+    lme4
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1

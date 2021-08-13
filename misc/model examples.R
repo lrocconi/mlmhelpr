@@ -1,9 +1,10 @@
 library(haven)
 library(tidyverse)
 library(lme4)
+load("misc/models.Rdata") # loads everything below
 
 # load high school and beyond data ---
-hsb <- haven::read_spss("misc/HSB.sav")
+hsb <- haven::read_spss("data-raw/HSB.sav")
 
 # prep data
 hsb <- hsb %>%
@@ -13,7 +14,7 @@ hsb <- hsb %>%
 
 # load nurses data ----
 
-nurses <- haven::read_spss("misc/nurses.sav")
+nurses <- haven::read_spss("data-raw/nurses.sav")
 
 # prep data
 nurses <- nurses %>%
@@ -23,7 +24,7 @@ nurses <- nurses %>%
 
 # load gpa2 data ----
 
-gpa <- haven::read_spss("misc/gpa2.sav")
+gpa <- haven::read_spss("data-raw/gpa2.sav")
 
 # prep data
 
@@ -39,7 +40,7 @@ gpa <- gpa %>%
 
 # load UTHAI1 data for logistic regression ----
 
-uthai <- haven::read_spss("misc/UTHAI1.sav")
+uthai <- haven::read_spss("data-raw/UTHAI1.sav")
 
 # random intercept model examples ----
 
@@ -155,3 +156,5 @@ model18_reml <- lmer(diameter ~ 1 + (1|plate) + (1|sample), Penicillin, REML = T
 
 model19_ml <- lmer(y ~ 1 + (1|s) + (1|d)+(1|dept:service), InstEval, REML=F)
 model19_reml <- lmer(y ~ 1 + (1|s) + (1|d)+(1|dept:service), InstEval, REML=T)
+
+# save.image(file="models.Rdata")
