@@ -71,5 +71,5 @@ pve <- function(model1, model2, verbose=TRUE) {
 
 load("misc/models.Rdata")
 
-pve(model0_ml, model1_reml, F) # ok
+pve(model0_ml, model1_reml, T) # ok
 pve(model0_ml, model18_ml, F) # not nested, returns error as expected

@@ -23,20 +23,25 @@
 
 pve <- function(model1, model2, verbose=TRUE) {
 
- # Yes, we need to think about how to do this. We could use the following to check the number of random effect terms
-  # lme4::getME(model, "k")
-  # For 3-level models k will equal 2.
   # Another hiccup is how to deal with random coefficients. Maybe throw a warring or error?
   # We could also count the number of rows in as.data.frame(lme4::VarCorr(model))
 
-
-    # nesting test 1 - not sure if this is correct
+    # nesting test
     if(nobs(model1) != nobs(model2)){
       stop("Models were not all fitted to the same size of dataset. Models must be nested.")}
 
+    # name
+      if(ngrps(model1) != ngrps(model2)){
+        stop("Models do not have the same random effects terms.")}
+
+    # same number of levels test
+    if(lme4::getME(model1, "k") != lme4::getME(model2, "k")){
+      stop("Models do not have the same number of random effects.")}
+
+
   # get number of groups of model2
-  ngrps_1 <- summary(model1)[["ngrps"]]
-  ngrps_2 <- summary(model2)[["ngrps"]]
+  ngrps_1 <- ngrps(model1)
+  ngrps_2 <- ngrps(model2)
 
   # get level-1 variance components
   vc1_lvl1 <- (summary(model1)$sigma)^2
@@ -166,6 +171,10 @@ pve <- function(model1, model2, verbose=TRUE) {
 
   #model7_ml is a 3-level model, see "model examples.R"
   pve(model7_lvl2, model7_ml, T) # FIXME something is not right here - negative proportion explained
+  # The issue is we are comparing a 2-level model and a 3-level model. When we should be comparing a null 3-level model
+  # with a 3-level model with explantory variables
+
+
 
   # 3-level + 3-level
   pve(model7_ml, model8_ml, T) # ok
