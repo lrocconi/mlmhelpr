@@ -4,7 +4,7 @@
 #'
 #' @param model2 Current model, produced using the `lme4::lmer()` function.
 #'
-#' @description `pve` calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2020, @raudenbush2002].
+#' @description `pve` calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2010, @raudenbush2002].
 #'
 #' @return Message (default) or data frame (with `verbose=F`)
 #'
@@ -30,22 +30,31 @@ pve <- function(model1, model2, verbose=TRUE) {
     if(nobs(model1) != nobs(model2)){
       stop("Models were not all fitted to the same size of dataset. Models must be nested.")}
 
-    # name
-      if(ngrps(model1) != ngrps(model2)){
-        stop("Models do not have the same random effects terms.")}
-
-    # same number of levels test
+    # Do the models have the same number of random effects?
     if(lme4::getME(model1, "k") != lme4::getME(model2, "k")){
       stop("Models do not have the same number of random effects.")}
 
+  # Are the random effects terms the same?
+    if(identical(lme4::ngrps(model1), lme4::ngrps(model2)) == FALSE){
+      stop("Models do not have the same random effects terms.")}
+
+  # Currently, only supports `lmer` function
+  if(lme4::getME(model1, "devcomp")$dims[["GLMM"]] == 1 | lme4::getME(model1, "devcomp")$dims[["NLMM"]] == 1)
+  {message("Warning: Currently, only `lmer` models are fully supported. Interpret results with caution.")}
+
+  # Is the estimation method (ML/REML) the same?
+  if(lme4::getME(model1, "devcomp")$dims[["REML"]] != lme4::getME(model2, "devcomp")$dims[["REML"]])
+  {message("Warning: Some models fit with REML, some not. Interpret results with caution.")}
+
 
   # get number of groups of model2
-  ngrps_1 <- ngrps(model1)
-  ngrps_2 <- ngrps(model2)
+  ngrps_1 <- lme4::ngrps(model1)
+  ngrps_2 <- lme4::ngrps(model2)
+
 
   # get level-1 variance components
-  vc1_lvl1 <- (summary(model1)$sigma)^2
-  vc2_lvl1 <- (summary(model2)$sigma)^2
+  vc1_lvl1 <- (sigma(model1))^2
+  vc2_lvl1 <- (sigma(model2))^2
 
   # get level-2 variance components
   vc1_lvl2 <- as.data.frame(lme4::VarCorr(model1))$vcov[1]
@@ -156,6 +165,9 @@ pve <- function(model1, model2, verbose=TRUE) {
       }
     }
   }
+################################################
+################################################
+###############################################
 
   load("misc/models.Rdata")
 
@@ -172,7 +184,7 @@ pve <- function(model1, model2, verbose=TRUE) {
   #model7_ml is a 3-level model, see "model examples.R"
   pve(model7_lvl2, model7_ml, T) # FIXME something is not right here - negative proportion explained
   # The issue is we are comparing a 2-level model and a 3-level model. When we should be comparing a null 3-level model
-  # with a 3-level model with explantory variables
+  # with a 3-level model with explanatory variables
 
 
 
