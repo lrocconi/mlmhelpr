@@ -6,7 +6,7 @@
 #'
 #' @description `pve` calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2020, @raudenbush2002].
 #'
-#' @return Data frame rounded to 3 decimal places
+#' @return Data frame
 #'
 #' @references{
 #'   \insertRef{peugh2010}{mlmhemlpr}
@@ -21,10 +21,7 @@
 #'
 
 
-pve <- function(model1, model2, round=3) {
-
-  # Another hiccup is how to deal with random coefficients. Maybe throw a warring or error?
-  # We could also count the number of rows in as.data.frame(lme4::VarCorr(model))
+pve <- function(model1, model2) {
 
   # nesting test
   if(nobs(model1) != nobs(model2)){
@@ -103,7 +100,7 @@ pve <- function(model1, model2, round=3) {
     final <- varcorr_df[,c("name", "pve")]
     names(final)[names(final)=="name"] <- "level"
     names(final)[names(final)=="pve"] <- "variance_explained"
-    final[,"variance_explained"] <- round(final[,"variance_explained"], round)
+    #final[,"variance_explained"] <- round(final[,"variance_explained"], round)
     return(final)
 
   }
@@ -135,7 +132,7 @@ pve <- function(model1, model2, round=3) {
     names(final)[names(final)=="name"] <- "level"
     names(final)[names(final)=="pve"] <- "variance_explained"
     final <- final[complete.cases(final),]
-    final[,"variance_explained"] <- round(final[,"variance_explained"], round)
+    #final[,"variance_explained"] <- round(final[,"variance_explained"], round)
     return(final)
   }
 
