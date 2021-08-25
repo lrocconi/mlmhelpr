@@ -58,7 +58,7 @@ icc <- function(x) {
   #calculate ICC
    for (i in 1:j) {
 
-     if(lme4::getME(model16, "devcomp")$dims[["GLMM"]] == 1 & family(x)$link == "logit") {
+     if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & family(x)$link == "logit") {
        grp[i] <- varcorr_df[i,"value"] / (sum(varcorr_df[i,"value"]) + ((pi^2)/3))
        icc <- rbind(icc, grp[i])
      }
