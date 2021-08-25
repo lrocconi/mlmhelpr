@@ -43,7 +43,7 @@ twolevel_fun = function(sub_sd = 1, item_sd=2, error_sd=3) {
 }
 
 # high individual level variation
-twolevel_fun(sub_sd = 100, item_sd=10, error_sd=1)
+twolevel_fun(sub_sd = 2, item_sd=25, error_sd=1)
 icc(re_model)
 
 # low individual level variation
