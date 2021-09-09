@@ -130,6 +130,6 @@ hausman(re_model3)
 #I'm not sure if random slopes are considered correctly in the function above- I have not tested it
 re_model4 <- lme4::lmer(mathach ~ 1 + ses + female + (ses|id),
                         data=hsb, REML=T)
-hausman(re_model4)
+hausman(re_model4)#
 
 
