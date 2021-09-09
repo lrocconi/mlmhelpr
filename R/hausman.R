@@ -1,131 +1,135 @@
-load("misc/models.Rdata")
+#' Hausman Test
+#'
+#' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
+#'
+#' @description The Hausman test tests whether there are significant differences between fixed effect and random effect models with similar specifications. If there is a significant difference, a random effects models (i.e. a multilevel model) *may* be more suitable (efficient). This function takes a model estimated with `lme4::lmer`, automatically re-estimates a fixed effects model, applies the Hausman test, and returns the test statistic and p-value.
+#'
+#' The Hausman test is based on @fox2016, p. 732 (footnote 46). The Hausman test statistic is distributed as chi-square with degrees of freedom equal to the number of coefficients.
+#'
+#' **Note**: The selection of a mixed effect (random effect/multilevel) model should not be solely driven by the Hausman test or any other single statistic. Proper model selection should reflect the research questions and nested nature of the data. In addition, Fox suggests that "the choice between random and fixed effects should reflect our view of the process that generates the data" (p. 732). See also https://stats.stackexchange.com/questions/502811/should-a-hausman-test-be-used-to-decide-between-fixed-vs-random-effects for a discussion of the test and its results.
+#'
+#'
+#' @return an object of class "htest"
+#'
+#'
+#' @references{
+#'   \insertRef{fox2016}{mlmhemlpr}
+#' }
+#'
+#' @importFrom lme4 VarCorr fixef
+#'
+#' @examples
+#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=T)
+#'
+#' hausman(fit)
+#'
 
-# simulate a two-level model - https://github.com/debruine/faux
+hausman <- function(re_model){
 
-# note - open and run the ICC function from icc.R
+# re-estimate re_model ----
 
-twolevel_fun = function(sub_sd = 1, item_sd=2, error_sd=3) {
-  set.seed(123)
-  dat <- faux::sim_mixed_cc(
-    sub_n = 100,  # subject sample size
-    item_n = 50,  # item sample size
-    grand_i = 10, # overall mean of the score
-    sub_sd = sub_sd,   # SD of subject random intercepts
-    item_sd = item_sd,  # SD of item random intercepts
-    error_sd = error_sd  # SD of residual error
-  )
+#get data
+data <- re_model@frame
 
-  #estimate models
-  fe_model <<- lm(y ~ 1 + as.factor(item_id), data=dat)
-  re_model <<- lme4::lmer(y ~ 1 + (1|item_id), data = dat)
+#get random effect names ----
+  #get names
+grps <- as.data.frame(lme4::VarCorr(re_model))[1]
+  #remove residual
+groups <- subset(grps, grps != "Residual")
+  #add as.factor() for fe model
+groups$grp <- paste0("as.factor(", groups$grp,")")
+  #make it partially a formula
+groups <- capture.output(cat(groups[,1], sep=" + "))
+
+#get fixed effect names ----
+  #grab names
+fixed <- names(lme4::fixef(re_model))
+  #remove intercept, if it exists
+fixed <- fixed[!(fixed %in% "(Intercept)")]
+  #remove duplicated names for factors
+fixed <- sub("^(.*)\\1$", "\\1", fixed, perl = TRUE)
+  #make it partially a formula
+fixed <- capture.output(cat(fixed, sep=" + "))
 
 
-  #coefficients (b_fe - be_re)
-  coef_diff <- coef(fe_model)[1] - lme4::fixef(re_model)[1]
-  coef_diff <- as.vector(coef_diff)
-  #variance (var(b_fe) - var(be_re))
-  var_diff = vcov(fe_model)[1,1] - vcov(re_model)[1,1]
+# set intercept
+intercept <- if(fixed[1] == "(Intercept)") {1} else {0}
 
-  # Fox formula, pg. 732
-  z2 <- coef_diff^2/var_diff
+#get dv
+dv <- re_model@call[["formula"]][[2]]
 
-  p <- pchisq(abs(z2), df = 1, lower.tail = FALSE)
+#rebuild formula for fe model
+fe_formula <- paste0(dv, " ~ ", capture.output(cat(intercept, fixed, groups, sep=" + ")))
 
-  res <- list(
-    p.value      = p,
-    parameter    = z2,
-    method       = "Hausman Test")
-  class(res) <- "htest"
-  return(res)
-  intraclass <- icc(re_model)
-  print(intraclass)
+#estimate model
+fe_model <- lm(fe_formula, data=data)
+
+
+
+# begin hausman test ----
+
+fe_coef <- coef(fe_model)
+re_coef <- lme4::fixef(re_model)
+fe_vcov <- vcov(fe_model)
+re_vcov <- vcov(re_model)
+fe_names <- names(fe_coef)
+re_names <- names(re_coef)
+common_coef_names <- re_names[re_names %in% fe_names]
+coefs <- common_coef_names[!(common_coef_names %in% "(Intercept)")] # drop intercept if included
+
+betas <- fe_coef[coefs] - re_coef[coefs]
+vcovs <- fe_vcov[coefs, coefs] - re_vcov[coefs, coefs]
+
+z <- as.numeric(abs(t(betas) %*% solve(vcovs) %*% betas))
+df <- length(betas)
+p <- pchisq(z, df, lower.tail = FALSE)
+
+#prep results
+stat <- z
+names(stat) <- "chi-square"
+parameter <- df
+names(parameter) <- "df"
+alpha = .05
+
+results <- list(statistic  = stat,
+            p.value      = p,
+            parameter    = parameter,
+            method       = "Hausman Test",
+            data.name    = "hsb"
+            )
+class(results) <- "htest" #Object of class "htest"
+
+#caution: might have gotten this backwards!
+message_text <- if(p < .05){
+  "\n\nResults are significantly different. \nThe multilevel model may not be suitable."
+} else {
+  "\n\nResults are not significantly different. \nThe multilevel model may be more suitable."
+}
+
+message(message_text)
+return(results)
+
 
 }
 
-# high individual level variation
-twolevel_fun(sub_sd = 2, item_sd=25, error_sd=1)
-icc(re_model)
+# test----
+load("misc/models.Rdata")
 
-# low individual level variation
-twolevel_fun(sub_sd = 1, item_sd=10, error_sd=1)
-icc(re_model)
+re_model1 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb)
+hausman(re_model1)
 
-# Do the Hausman test results make sense?
+re_model2 <- lme4::lmer(mathach ~ 1 + ses + female + (1|id),
+            data=hsb, REML=T)
+hausman(re_model2)
 
-# specifying fixed effect model
-model1_ols <- lm(mathach ~ 1 + ses + as.factor(id), data=hsb)
+re_model3 <- lme4::lmer(mathach ~ 1 + ses + female + (1|id) + (1|pracad),
+                        data=hsb, REML=T)
+hausman(re_model3)
 
-# Centering SES and computing an average ses for each school (meanses)
-hsb$meanses <- ave(hsb$ses, hsb$id)
-hsb$ses.cwc <- hsb$ses - ave(hsb$ses, hsb$id)
-
-# A simplied fixed-effect model using differencing
-model1b_ols <- lm(mathach ~ 1 + ses.cwc, data=hsb)
-
-# Fox p. 731 paragraph starting "Consider, however, the following, likely
-# surprising, fact:" notes that you can also get the fixed effect estimate by
-# including the group mean as a regressor. He states that "if our object is to
-# estimate the individual-level coefficient beta_2 of X, controlling for all
-# group-level differences, it suffices to control for the within- group means,
-# X_bar_i. The test that beta_3, the coefficient of the compositional variable, is
-# 0 is related to the so-called Hausman test." Below is that test.
-model1c_ols <- lm(mathach ~ 1 + ses + meanses, data=hsb)
-summary(model1c_ols)
-
-# random effects model
-model1_ml
-
-
-#coefficients (b_fe - be_re)
-(coef_diff <- coef(model1b_ols)[2] - lme4::fixef(model1_ml)[2])
-
-#variance (var(b_fe) - var(be_re))
-(var_diff = vcov(modelb1_ols)[2,2] - vcov(model1_ml)[2,2])
-
-# Fox formula, pg. 732
-(z2 <- coef_diff^2/var_diff)
-
-pchisq(z2, df = 1, lower.tail = FALSE)
-
-# I think this is working correctly. I think plm and Stata are using different/modified formulas
-# and probably ones more related to panel/longitudinal data and Fox's is more general (?? I think??)
-
-# another method from https://stat.ethz.ch/pipermail/r-help/2011-January/265671.html - I followed this, but got the same result as above
-
-#testing using hausman test from plm
-
-#fixed effect model
-fe <- plm::plm(mathach ~ 1 + ses, index="id", data=hsb, model="within") #note same estimate for model1_ols ses
-
-re <- plm::plm(mathach ~ 1 + ses, index="id", data=hsb, model="random")
-
-plm::phtest(fe, re)
-
-#plm::phtest(model1b_ols, re)
-
-# plm::phtest and Stata hausman give different results (based on defaults)
-# I think the difference has to do with how plm treats unbalanced data
-# https://cran.rstudio.com/web/packages/plm/vignettes/B_plmFunction.html
-
-# following phtest from source code ----
-#from https://rdrr.io/cran/plm/src/R/test_general.R
-
-  coef.wi <- coef(model1_ols)
-  coef.re <- lme4::fixef(model1_reml)
-  vcov.wi <- vcov(model1_ols)
-  vcov.re <- vcov(model1_reml)
-  names.wi <- names(coef.wi)
-  names.re <- names(coef.re)
-  common_coef_names <- names.re[names.re %in% names.wi]
-  coef.h <- common_coef_names[!(common_coef_names %in% "(Intercept)")] # drop intercept if included (relevant when between model inputed)
-  if(length(coef.h) == 0) stop("no common coefficients in models")
-  dbeta <- coef.wi[coef.h] - coef.re[coef.h]
-  df <- length(dbeta)
-  dvcov <- vcov.wi[coef.h, coef.h] - vcov.re[coef.h, coef.h]
-
-  stat <- as.numeric(abs(t(dbeta) %*% solve(dvcov) %*% dbeta))
-  pval <- pchisq(stat, df = df, lower.tail = FALSE)
-
-plm::phtest(fe, re)
+#I'm not sure if random slopes are considered correctly in the function above- I have not tested it
+re_model4 <- lme4::lmer(mathach ~ 1 + ses + female + (ses|id),
+                        data=hsb, REML=T)
+hausman(re_model4)
 
 
