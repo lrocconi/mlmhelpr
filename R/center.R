@@ -59,7 +59,7 @@ center <- function(x, group=NULL, variables, value=NULL){
     # these are important, but have not used them yet
     modeltype <- x@call[[1]]
     use_REML <- x@call[["REML"]]
-
+    cat("Model with grand-mean centering: \n\n")
     return(lme4::lmer(formula_as_chr, df2, REML=F))
 
 
@@ -110,7 +110,8 @@ center <- function(x, group=NULL, variables, value=NULL){
     # these are important, but have not used them yet
     modeltype <- x@call[[1]]
     use_REML <- x@call[["REML"]]
-
+    cat("Model with group-mean centering: \n",
+        "group = ", group, "\n\n")
     return(lme4::lmer(formula_as_chr, df2, REML=F))
 
   }
@@ -119,9 +120,9 @@ center <- function(x, group=NULL, variables, value=NULL){
 # test
 load("misc/models.Rdata")
 center(model0_ml, variables="mathach")
-center(model0_ml, type="group", variables="mathach")
+
 center(model0_ml, group="id", variables="mathach")
-center(model1_ml, type="grand", variables=c("mathach", "ses"))
-tmp <- center(model1_ml, type="group", group="id", variables=c("mathach", "ses"))
+center(model1_ml, variables=c("mathach", "ses"))
+tmp <- center(model1_ml, group="id", variables=c("mathach", "ses"))
 
 names(tmp@frame)
