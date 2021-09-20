@@ -6,7 +6,7 @@
 #'
 #' @description Implements cluster-robust standard errors from the clubSandwich package.
 #'
-#' @return Data frame and message indicating type of robust standard error requested
+#' @return Data frame and message indicating type of robust standard error requested.
 #'
 #' @importFrom clubSandwich vcovCR coef_test
 #'
