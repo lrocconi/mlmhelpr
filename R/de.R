@@ -2,12 +2,12 @@
 #'
 #' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
-#' @param median Boolean argument (TRUE/FALSE) to use the median cluster size to compute the design effect. By default, the average is used.
+#' @param median Boolean argument (TRUE/FALSE) to use the median cluster size to compute the design effect. By default, the average cluster size is used.
 #'
 #'
-#' @description The design effect estimates the difference between the variance of an observed sample and a similar simple random sample. In the multilevel modeling context, this can be used to determine whether clustering introduces negative bias and whether the assumption of independence is held. Thus, it can help determine whether multilevel modeling is appropriate for a given data set. The calculations are based on @hox2018 and uses the `mlmhelpr:icc` function. A rule of thumb is that design effects smaller than 2 indicates multilevel modelling is not necessary; however, this is dependent on cluster size and other factors [@lai2015].
+#' @description The design effect quantifies the degree a sample deviates from a simple random sample. In the multilevel modeling context, this can be used to determine whether clustering will negatively bias standard errors and whether the assumption of independence is held. Thus, it can help determine whether multilevel modeling is appropriate for a given data set. The calculations are based on @hox2018 and uses the `mlmhelpr:icc` function. A rule of thumb is that design effects smaller than 2 may indicate multilevel modeling is not necessary; however, this is dependent on cluster size and other factors [@lai2015].
 #'
-#' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (2002), "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 74). Since the intra-class correlation is part of the design effect calcuation, caution is advised when interpreting models with random slopes.
+#' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (1998) [@kreft1998], "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 63). Since the intra-class correlation is part of the design effect calculation, caution is advised when interpreting models with random slopes.
 #'
 #'
 #' @return a data frame containing the cluster variable, number of clusters, average (or median) cluster size, intraclass correlation, and the design effect
@@ -16,6 +16,7 @@
 #' @references{
 #'   \insertRef{hox2018}{mlmhemlpr}
 #'   \insertRef{lai2015}{mlmhemlpr}
+#'   \insertRef{kreft1998}{mlmhelpr}
 #' }
 #'
 #' @importFrom lme4 ngrps getME
@@ -54,7 +55,6 @@ de <- function(x, median = FALSE) {
   k$grp <- rownames(k)
   k$nc <- nc
   k$md <- md
-
 
   # Compute ICC
   varcorr_df <- as.data.frame(lme4::VarCorr(x))
@@ -122,15 +122,3 @@ de <- function(x, median = FALSE) {
   return(df2[df2$cluster_name != "Residual", ])
 
 }
-
-de(model0_ml, median=T)
-de(model0_ml)
-
-de(model0_reml)
-
-de(model4_ml) #random slopes
-
-de(model7_ml) #three level
-
-
-

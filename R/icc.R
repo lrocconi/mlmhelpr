@@ -1,10 +1,10 @@
 #' Intraclass Correlation (ICC)
 #'
-#' @param x A model produced using the `lme4::lmer()` or `lme4::glmer` functions. This is an object of class `merMod` and subclass `lmerMod` or `glmerMod`.
+#' @param x A model produced using the `lme4::lmer()` or `lme4::glmer()` functions. This is an object of class `merMod` and subclass `lmerMod` or `glmerMod`.
 #'
 #' @description The `icc` function calculates the intraclass correlation (ICC) for multilevel models. The ICC represents the proportion of group-level variance to total variance. The ICC can be calculated for two or more levels in random-intercept models [@hox2018].
 #'
-#' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (2002), "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 74). However, Snijders and Bosker (2012) offer a calculation to derive this value (equation 7.9). This equation is implemented here.
+#' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (1998)[@kreft1998], "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 63). However, Snijders and Bosker (2012) [@snijders2012] offer a calculation to derive this value (equation 7.9). This equation is implemented here.
 #'
 #' The `icc` function only calculates the intraclass correlation for multilevel logistic regression models. Specifically, generalized linear mixed-effect model estimated with the `lme4::glmer` function with `family = binomial(link="logit")`. The estimation method follows Hox et al. (2018, p. 107) recommendation of setting the level-1 residual variance to $\frac{\pi^2}{3}$. For a discussion different methods for estimating the intraclass correlation for binary responses see Wu et al. (2012) [@Wu2012].
 #'
@@ -16,6 +16,7 @@
 #'   \insertRef{kreft2002}{mlmhemlpr}
 #'   \insertRef{snijders2012}{mlmhemlpr}
 #'   \insertRef{Wu2012}{mlmhelpr}
+#'   \insertRef{kreft1998}{mlmhelpr}
 #' }
 #'
 #' @importFrom lme4 VarCorr
@@ -39,7 +40,7 @@
 
 icc <- function(x) {
 
-  varcorr_df <- as.data.frame(lme4::VarCorr(x))
+   varcorr_df <- as.data.frame(lme4::VarCorr(x))
 
   # this creates full grp names ----
   varcorr_df$name <- ifelse(is.na(varcorr_df$var1),
