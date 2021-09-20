@@ -1,26 +1,42 @@
-#' Title
+#' Plausible Values Range
 #'
-#' @param x
+#' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
-#' @return
-#' @export
+#' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a whole number, e..g. 99, 95, 80, etc. The 95% value range is used by default.
+#'
+#' @description The plausible values range is useful for gauging the magniture of variation in the intercept. See @raudenbush2002, p. 71.
+#'
+#' @return A data frame specifying lower and upper bounds.
+#'
+#' @references{
+#'   \insertRef{raudenbush2002}{mlmhemlpr}
+#' }
 #'
 #' @examples
-#' #hierarchical linear models p. 71
+#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=T)
 #'
-plausible_values <- function(x){
+#' plausible_values(fit) #default is 95% range
+#' plausible_values(fit, 99)
+#'
+plausible_values <- function(x, pct=95){
 
 #get Y00
 intercept <- as.data.frame(x@beta)[1,]
+
 #get CI
-sd <- 1.96 #95%
+ #convert percentile to z-score
+ if(pct < 1){stop("Percentiles should be written as whole numbers. Ex: 95, 99, 80, etc.")}
+
+pct <- ((100-pct)/2)/100
+sd <- qnorm(pct,lower.tail=FALSE)
 
 #get T00
 var_df <- as.data.frame(lme4::VarCorr(x))
 variance <- subset(var_df, var1 == "(Intercept)")$sdcor
 
-upper <- intercept + (1.96*variance)
-lower <- intercept - (1.96*variance)
+upper <- intercept + (sd*variance)
+lower <- intercept - (sd*variance)
 
 
 
@@ -31,4 +47,4 @@ data.frame("lower"=lower, "upper" = upper)
 }
 
 load("misc/models.Rdata")
-plausible_values(model1_ml)
+plausible_values(model1_ml, 99)
