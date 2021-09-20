@@ -29,10 +29,14 @@
 
 de <- function(x, median = FALSE) {
 
+  # Check whether model is of class lmerMod
+  if(class(x)[1] != "lmerMod"){
+    stop("Only models fitted using the `lmer` function are supported.")}
+
   # DE = 1 + (nc-1)*ICC, where nc is the number of individuals in each cluster.
   # If all cluster sizes are equal, this is easy. If cluster sizes are not equal, the usual option is to
-  # compute the average cluster size (i.e., N/k, where N is level-1 sample size and k is cluster size).
-  # Another option is to use the median cluster size
+  # compute the average cluster size (i.e., N/k, where N is level-1 sample size and k is # of clusters).
+  # Another option is to use the median cluster size.
 
   # Compute counts at each level as well as average and median cluster size
   N <- nrow(x@frame)
@@ -109,8 +113,9 @@ de <- function(x, median = FALSE) {
                       design_effect=df$de)
   }
 
-  if(lme4::getME(x, "m") > 1)
-  {message("Warning: Random slopes detected! Interpret with caution.\n
+  # Check for random slopes
+  if(sum(!is.na(varcorr_df$var2)) > 0)
+    {message("Warning: Random slopes detected! Interpret with caution.\n
             See ?mlmhelpr::de() for more information.")}
 
   #return(head(df2, nrow(df2)-1))
@@ -123,7 +128,9 @@ de(model0_ml)
 
 de(model0_reml)
 
-de(model7_ml)
+de(model4_ml) #random slopes
+
+de(model7_ml) #three level
 
 
 

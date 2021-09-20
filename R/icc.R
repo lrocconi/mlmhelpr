@@ -83,6 +83,8 @@ icc <- function(x) {
   if(sum(!is.na(varcorr_df$var2)) > 0)
   {message("Warning: Random slopes detected! Interpret with caution.\n
            See ?mlmhelpr::icc() for more information.")}
+
+  # if glmer, check link function
   if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & family(x)$link != "logit")
    {message("Warning: Only glmer models with logit link functions supported")}
   # print

@@ -39,8 +39,3 @@ robust_se <- function(model, type="CR2"){
 
 }
 
-load("misc/models.Rdata")
-robust_se(model, type="CR1S")
-robust_se(model10_ml, type="CR1S")
-robust_se(model14_reml)
-robust_se(model16)
