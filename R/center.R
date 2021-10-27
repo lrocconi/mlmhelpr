@@ -118,11 +118,11 @@ center <- function(x, group=NULL, variables, value=NULL){
 }
 
 # test
-load("misc/models.Rdata")
-center(model0_ml, variables="mathach")
-
-center(model0_ml, group="id", variables="mathach")
-center(model1_ml, variables=c("mathach", "ses"))
-tmp <- center(model1_ml, group="id", variables=c("mathach", "ses"))
-
-names(tmp@frame)
+# load("misc/models.Rdata")
+# center(model0_ml, variables="mathach")
+#
+# center(model0_ml, group="id", variables="mathach")
+# center(model1_ml, variables=c("mathach", "ses"))
+# tmp <- center(model1_ml, group="id", variables=c("mathach", "ses"))
+#
+# names(tmp@frame)

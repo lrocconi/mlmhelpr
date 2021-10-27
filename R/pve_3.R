@@ -169,27 +169,27 @@ pve <- function(model1, model2, verbose=TRUE) {
 ################################################
 ###############################################
 
-  load("misc/models.Rdata")
-
-  pve(model0_ml, model1_ml, FALSE) # ok
-    # 2-level + 2-level
-
-  pve(model0_ml, model1_ml, T) # ok
-
-  # 2-level + 3-level model
-  # set 2-level model model
-  model7_lvl2 <- lme4::lmer(stress ~ 1 + (1|ward),
-                            nurses, REML=T)
-
-  #model7_ml is a 3-level model, see "model examples.R"
-  pve(model7_lvl2, model7_ml, T) # FIXME something is not right here - negative proportion explained
-  # The issue is we are comparing a 2-level model and a 3-level model. When we should be comparing a null 3-level model
-  # with a 3-level model with explanatory variables
-
-
-
-  # 3-level + 3-level
-  pve(model7_ml, model8_ml, T) # ok
-
-  # nesting check
-  pve(model0_ml, model18_ml, F) # not nested, returns error as expected
+  # load("misc/models.Rdata")
+  #
+  # pve(model0_ml, model1_ml, FALSE) # ok
+  #   # 2-level + 2-level
+  #
+  # pve(model0_ml, model1_ml, T) # ok
+  #
+  # # 2-level + 3-level model
+  # # set 2-level model model
+  # model7_lvl2 <- lme4::lmer(stress ~ 1 + (1|ward),
+  #                           nurses, REML=T)
+  #
+  # #model7_ml is a 3-level model, see "model examples.R"
+  # pve(model7_lvl2, model7_ml, T) # FIXME something is not right here - negative proportion explained
+  # # The issue is we are comparing a 2-level model and a 3-level model. When we should be comparing a null 3-level model
+  # # with a 3-level model with explanatory variables
+  #
+  #
+  #
+  # # 3-level + 3-level
+  # pve(model7_ml, model8_ml, T) # ok
+  #
+  # # nesting check
+  # pve(model0_ml, model18_ml, F) # not nested, returns error as expected
