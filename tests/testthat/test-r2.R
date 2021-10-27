@@ -15,5 +15,3 @@ test_that("R^2 works", {
   expect_equal(capture.output(r2(fit)), "The squared correlation between predicted and observed values is 0.232")
 })
 
-
-

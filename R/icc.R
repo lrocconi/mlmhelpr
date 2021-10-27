@@ -92,17 +92,3 @@ icc <- function(x) {
   return(iccs)
 }
 
-## testing ----
-#
-# load("misc/models.Rdata")
-#
-#
-# icc(model1_ml) # null model
-#
-# icc(model7_ml) # three level
-#
-# icc(model4_ml) # with random slope
-#
-# icc(model16) #logistic
-
-
