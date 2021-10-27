@@ -5,6 +5,6 @@ data=hsb, REML=T)
 test_that("plausible values works", {
   expect_equal(round(plausible_values(fit)[1,1],3), 7.956)
   expect_equal(round(plausible_values(fit,99)[1,1],3), 6.774)
-  # test messsages
+  # test messages
   expect_message(plausible_values(fit))
 })
