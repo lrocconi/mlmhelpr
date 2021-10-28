@@ -34,7 +34,7 @@ robust_se <- function(model, type="CR2"){
   # compute cluster robust standard errors from clubSandwich package
   covmat <- clubSandwich::vcovCR(model, type=type)
   #message(type, " correction used")
-  cat(type, " correction used", "\n")
+  cat(type, "correction used", "\n")
   clubSandwich::coef_test(model, vcov=covmat)
 
 }
