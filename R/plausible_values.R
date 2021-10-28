@@ -45,6 +45,3 @@ message(paste0("95% of values for the intercepts fall between ",
                round(lower,2), " and ", round(upper,2), "."))
 data.frame("lower"=lower, "upper" = upper)
 }
-#
-# load("misc/models.Rdata")
-# plausible_values(model1_ml, 99)
