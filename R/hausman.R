@@ -100,6 +100,11 @@ results <- list(statistic  = stat,
             )
 class(results) <- "htest" #Object of class "htest"
 
+# Check for random slopes
+varcorr_df <- as.data.frame(lme4::VarCorr(re_model))
+if(sum(!is.na(varcorr_df$var2)) > 0)
+{warning("Random slopes detected! Interpret with caution.\nSee ?mlmhelpr::de() for more information.")}
+
 #caution: might have gotten this backwards!
 message_text <- if(p < .05){
   "\n\nResults are significantly different. \nThe multilevel model may not be suitable."
