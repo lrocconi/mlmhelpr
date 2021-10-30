@@ -38,6 +38,10 @@ Automaticaly grand- or group-mean center and re-estimate models
 
 Perform a Hausman test to test for differences between random- and fixed-effects models
 
+### `design_effect`
+
+Estimate a design effect to determine if multilevel modeling is needed
+
 ### `icc` 
 
 Calculate the intraclass correlation
