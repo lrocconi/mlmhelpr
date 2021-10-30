@@ -100,6 +100,11 @@ results <- list(statistic  = stat,
             )
 class(results) <- "htest" #Object of class "htest"
 
+# Check for random slopes
+varcorr_df <- as.data.frame(lme4::VarCorr(re_model))
+if(sum(!is.na(varcorr_df$var2)) > 0)
+{warning("Random slopes detected! Interpret with caution.\nSee ?mlmhelpr::de() for more information.")}
+
 #caution: might have gotten this backwards!
 message_text <- if(p < .05){
   "\n\nResults are significantly different. \nThe multilevel model may not be suitable."
@@ -112,24 +117,24 @@ return(results)
 
 
 }
-
-# test----
-load("misc/models.Rdata")
-
-re_model1 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb)
-hausman(re_model1)
-
-re_model2 <- lme4::lmer(mathach ~ 1 + ses + female + (1|id),
-            data=hsb, REML=T)
-hausman(re_model2)
-
-re_model3 <- lme4::lmer(mathach ~ 1 + ses + female + (1|id) + (1|pracad),
-                        data=hsb, REML=T)
-hausman(re_model3)
-
-#I'm not sure if random slopes are considered correctly in the function above- I have not tested it
-re_model4 <- lme4::lmer(mathach ~ 1 + ses + female + (ses|id),
-                        data=hsb, REML=T)
-hausman(re_model4)#
+#
+# # test----
+# load("misc/models.Rdata")
+#
+# re_model1 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb)
+# hausman(re_model1)
+#
+# re_model2 <- lme4::lmer(mathach ~ 1 + ses + female + (1|id),
+#             data=hsb, REML=T)
+# hausman(re_model2)
+#
+# re_model3 <- lme4::lmer(mathach ~ 1 + ses + female + (1|id) + (1|pracad),
+#                         data=hsb, REML=T)
+# hausman(re_model3)
+#
+# #I'm not sure if random slopes are considered correctly in the function above- I have not tested it
+# re_model4 <- lme4::lmer(mathach ~ 1 + ses + female + (ses|id),
+#                         data=hsb, REML=T)
+# hausman(re_model4)#
 
 
