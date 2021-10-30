@@ -28,7 +28,7 @@
 #' de(fit)
 
 
-de <- function(x, median = FALSE) {
+design_effect <- function(x, median = FALSE) {
 
   # Check whether model is of class lmerMod
   if(class(x)[1] != "lmerMod"){

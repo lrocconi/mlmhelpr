@@ -18,7 +18,10 @@
 #' @export
 #'
 #' @examples
+#'fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=F)
+#'fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=F)
 #'
+#'pve(fit1, fit2)
 
 
 pve <- function(model1, model2) {
