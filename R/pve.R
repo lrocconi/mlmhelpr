@@ -18,7 +18,10 @@
 #' @export
 #'
 #' @examples
+#'fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=F)
+#'fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=F)
 #'
+#'pve(fit1, fit2)
 
 
 pve <- function(model1, model2) {
@@ -138,17 +141,3 @@ pve <- function(model1, model2) {
 
 
 }
-
-load("misc/models.Rdata")
-
-pve(model0_ml, model1_reml) # Warning REML
-
-pve(model0_ml, model1_ml) # OK
-
-pve(model0_ml, model18_ml) # not nested, returns error as expected
-
-
-# 3-level + 3-level
-pve(model7_ml, model8_ml) # ok
-
-
