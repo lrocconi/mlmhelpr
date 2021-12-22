@@ -1,14 +1,15 @@
-#' Plausible Values Range
+#' Plausible Values Range / Random Effect Confidence Intervals
 #'
 #' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
 #' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a whole number, e..g. 99, 95, 80, etc. The 95% value range is used by default.
 #'
-#' @description The plausible values range is useful for gauging the magniture of variation in the intercept. See @raudenbush2002, p. 71.
+#' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. See @raudenbush2002, p. 71 and @hoffman2015, p. 166.
 #'
-#' @return A data frame specifying lower and upper bounds.
+#' @return A data frame specifying lower and upper bounds for each fixed effect.
 #'
 #' @references{
+#'   \insertRef{hoffman2015}{mlmhemlpr}
 #'   \insertRef{raudenbush2002}{mlmhemlpr}
 #' }
 #'
@@ -21,9 +22,6 @@
 #'
 plausible_values <- function(x, pct=95){
 
-#get Y00
-intercept <- as.data.frame(x@beta)[1,]
-
 #get CI
  #convert percentile to z-score
  if(pct < 1){stop("Percentiles should be written as whole numbers. Ex: 95, 99, 80, etc.")}
@@ -35,16 +33,26 @@ sd <- qnorm(pct,lower.tail=FALSE)
 var_df <- as.data.frame(lme4::VarCorr(x))
 variance <- subset(var_df, var1 == "(Intercept)")$sdcor
 
-upper <- intercept + (sd*variance)
-lower <- intercept - (sd*variance)
+#get random effiects
+re_df <- as.data.frame(VarCorr(model4_ml))
+#remove residual
+re_df <- subset(re_df, grp != "Residual")
+#remove covariance
+re_df <- subset(re_df, is.na(var2))
 
+#get fixed effects
+fe_df <- as.data.frame(fixef(model4_ml), optional=T)
+fe_df_rows <- rownames(fe_df)
+fe_df <- cbind(fe_df_rows, fe_df)
+names(fe_df) <- c("fe_df_rows", "fixed_effect")
 
+# combine fe and re into one df
 
-message("Plausible values range/predicitve interval:")
-message(paste0("95% of values for the intercepts fall between ",
-               round(lower,2), " and ", round(upper,2), "."))
-data.frame("lower"=lower, "upper" = upper)
+pv_df <- merge(re_df, fe_df, by.x = "var1", by.y="fe_df_rows")
+
+# calculations
+pv_df$upper <- pv_df$fixed_effect + (sd*pv_df$sdcor)
+pv_df$lower <- pv_df$fixed_effect - (sd*pv_df$sdcor)
+
+pv_df[c("var1", "upper", "fixed_effect", "lower")]
 }
-
-load("misc/models.Rdata")
-plausible_values(model1_ml, 99)
