@@ -34,14 +34,14 @@ var_df <- as.data.frame(lme4::VarCorr(x))
 variance <- subset(var_df, var1 == "(Intercept)")$sdcor
 
 #get random effiects
-re_df <- as.data.frame(VarCorr(model4_ml))
+re_df <- as.data.frame(lme4::VarCorr(x))
 #remove residual
 re_df <- subset(re_df, grp != "Residual")
 #remove covariance
 re_df <- subset(re_df, is.na(var2))
 
 #get fixed effects
-fe_df <- as.data.frame(fixef(model4_ml), optional=T)
+fe_df <- as.data.frame(lme4::fixef(x), optional=T)
 fe_df_rows <- rownames(fe_df)
 fe_df <- cbind(fe_df_rows, fe_df)
 names(fe_df) <- c("fe_df_rows", "fixed_effect")
@@ -51,8 +51,8 @@ names(fe_df) <- c("fe_df_rows", "fixed_effect")
 pv_df <- merge(re_df, fe_df, by.x = "var1", by.y="fe_df_rows")
 
 # calculations
-pv_df$upper <- pv_df$fixed_effect + (sd*pv_df$sdcor)
-pv_df$lower <- pv_df$fixed_effect - (sd*pv_df$sdcor)
+pv_df$upper_ci <- pv_df$fixed_effect + (sd*pv_df$sdcor)
+pv_df$lower_ci <- pv_df$fixed_effect - (sd*pv_df$sdcor)
 
-pv_df[c("var1", "upper", "fixed_effect", "lower")]
+pv_df[c("grp", "var1", "upper_ci", "fixed_effect", "lower_ci")]
 }
