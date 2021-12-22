@@ -1,4 +1,4 @@
-#' Plausible Values Range / Random Effect Confidence Intervals
+#' Plausible Values Range  / Random Effect Confidence Intervals
 #'
 #' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
