@@ -32,7 +32,7 @@ robust_se <- function(model, type="CR2"){
      stop("The 'clubSandwich' package must be installed to use this function.")}
 
   # Check whether model is of class lmerMod
-  if(class(model)[1] != "lmerMod"){
+  if(class(model)[1] != "lmerMod" & class(model)[1] != "lmerModLmerTest"){
     stop("Only models fitted using the `lmer` function are supported.")}
 
 # Check whether "type" is correctly specified
