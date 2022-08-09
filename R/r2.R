@@ -35,7 +35,7 @@ r2 <- function(x, verbose=T) {
 
   # return message by default
   if(verbose == T){
-  return(cat(c("The squared correlation between predicted and observed values is", round(r2,3)),sep="\n"))}
+  return(cat(c("The squared correlation between predicted and observed values is ", round(r2,3)),sep=""))}
   # if verbose = F, just return value
   if(verbose == F){
   print(r2)}

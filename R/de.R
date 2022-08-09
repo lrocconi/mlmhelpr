@@ -28,11 +28,11 @@
 #' de(fit)
 
 
-de <- function(x, median = FALSE) {
+design_effect <- function(x, median = FALSE) {
 
   # Check whether model is of class lmerMod
-  if(class(x)[1] != "lmerMod"){
-    stop("Only models fitted using the `lmer` function are supported.")}
+  if(class(x)[1] != "lmerMod" & class(x)[1] != "lmerModLmerTest"){
+    stop("Only models fitted using the `lmer`function are supported.")}
 
   # DE = 1 + (nc-1)*ICC, where nc is the number of individuals in each cluster.
   # If all cluster sizes are equal, this is easy. If cluster sizes are not equal, the usual option is to
