@@ -1,14 +1,15 @@
-#' Plausible Values Range
+#' Plausible Values Range / Random Effect Confidence Intervals
 #'
 #' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
 #' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a whole number, e..g. 99, 95, 80, etc. The 95% value range is used by default.
 #'
-#' @description The plausible values range is useful for gauging the magniture of variation in the intercept. See @raudenbush2002, p. 71.
+#' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. See @raudenbush2002, p. 71 and @hoffman2015, p. 166.
 #'
-#' @return A data frame specifying lower and upper bounds.
+#' @return A data frame specifying lower and upper bounds for each fixed effect.
 #'
 #' @references{
+#'   \insertRef{hoffman2015}{mlmhemlpr}
 #'   \insertRef{raudenbush2002}{mlmhemlpr}
 #' }
 #'
@@ -21,27 +22,38 @@
 #'
 plausible_values <- function(x, pct=95){
 
-#get Y00
-intercept <- as.data.frame(x@beta)[1,]
+  #get CI
+  #convert percentile to z-score
+  if(pct < 1){stop("Percentiles should be written as whole numbers. Ex: 95, 99, 80, etc.")}
 
-#get CI
- #convert percentile to z-score
- if(pct < 1){stop("Percentiles should be written as whole numbers. Ex: 95, 99, 80, etc.")}
+  pct <- ((100-pct)/2)/100
+  sd <- qnorm(pct,lower.tail=FALSE)
 
-pct <- ((100-pct)/2)/100
-sd <- qnorm(pct,lower.tail=FALSE)
+  #get T00
+  var_df <- as.data.frame(lme4::VarCorr(x))
+  variance <- subset(var_df, var1 == "(Intercept)")$sdcor
 
-#get T00
-var_df <- as.data.frame(lme4::VarCorr(x))
-variance <- subset(var_df, var1 == "(Intercept)")$sdcor
+  #get random effects
+  re_df <- as.data.frame(lme4::VarCorr(x))
+  #remove residual
+  re_df <- subset(re_df, grp != "Residual")
+  #remove covariance
+  re_df <- subset(re_df, is.na(var2))
 
-upper <- intercept + (sd*variance)
-lower <- intercept - (sd*variance)
+  #get fixed effects
+  fe_df <- as.data.frame(lme4::fixef(x), optional=T)
+  fe_df_rows <- rownames(fe_df)
+  fe_df <- cbind(fe_df_rows, fe_df)
+  names(fe_df) <- c("fe_df_rows", "fixed_effect")
 
+  # combine fe and re into one df
 
+  pv_df <- merge(re_df, fe_df, by.x = "var1", by.y="fe_df_rows")
 
-message("Plausible values range/predicitve interval:")
-message(paste0("95% of values for the intercepts fall between ",
-               round(lower,2), " and ", round(upper,2), "."))
-data.frame("lower"=lower, "upper" = upper)
+  # calculations
+  pv_df$upper_ci <- pv_df$fixed_effect + (sd*pv_df$sdcor)
+  pv_df$lower_ci <- pv_df$fixed_effect - (sd*pv_df$sdcor)
+
+  pv_df[c("grp", "var1", "upper_ci", "fixed_effect", "lower_ci")]
 }
+
