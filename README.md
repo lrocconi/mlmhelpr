@@ -19,7 +19,7 @@ A package of multilevel modeling helper functions
 ## Authors
 
 -   [Louis Rocconi, PhD](https://lrocconi.github.io/)
--   [Anthony Schmidt](http://www.anthonyschmidt.co)
+-   [Anthony Schmidt, PhD](http://www.anthonyschmidt.co)
 
 ## Installation
 
