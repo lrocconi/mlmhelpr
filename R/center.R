@@ -37,6 +37,10 @@
 
 center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL, value=NULL, value_variables = NULL){
 
+  # Check whether model is of class lmerMod
+  if(class(x)[1] != "lmerMod" & class(x)[1] != "lmerModLmerTest"){
+    stop("Only models fitted using the `lmer`function are supported.")}
+
   #get data
   df2 <- x@frame
 
@@ -180,9 +184,6 @@ center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL
 
     }
   # refit model ----
-  # these are important, but have not used them yet
-  df2 <<- df2
-    modeltype <- x@call[[1]]
     use_REML <- isREML(x)
     cat("Model re-fit with centered variables: \n\n")
     if(use_REML == "F" | use_REML == "FALSE") {
