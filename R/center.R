@@ -2,17 +2,17 @@
 #'
 #' @param x A model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
-#' @param grand_variables one or more variables to center at the grand-mean or a user-specified value
+#' @param grand_variables one or more variables to center at the grand-mean
 #'
-#' @param group Grouping variable. If a grouping variable is specified, group-mean centering (also known as centering within cluster, CWC) based on that variable will be performed. Otherwise, grand-mean centering will be performed.
+#' @param group Grouping variable. If a grouping variable is specified, group-mean centering (also known as centering within cluster) based on that variable will be performed.
 #'
 #' @param group_variables Variables to be group-mean centered.
 #'
-#' @param value Center at a specific value rather than the grand mean (default)
+#' @param value Center at a specific value rather than the grand mean
 #'
-#' @param value_variables Variables to be centered at user-specified value rather than the grand mean (default)
+#' @param value_variables Variables to be centered at user-specified value rather than the grand mean
 #'
-#' @description This function refits a model using grand-mean centering (default) or group-mean centering (if a grouping variable is specified)
+#' @description This function refits a model using grand-mean centering, group-mean centering (if a grouping variable is specified), or centering at a user-specified value
 #'
 #' @return a newly fitted model
 #'
@@ -39,7 +39,7 @@ center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL
 
   # Check whether model is of class lmerMod
   if(class(x)[1] != "lmerMod" & class(x)[1] != "lmerModLmerTest"){
-    stop("Only models fitted using the `lmer`function are supported.")}
+    stop("Only models fitted using the `lmer`function are currently supported.")}
 
   #get data
   df2 <- x@frame
