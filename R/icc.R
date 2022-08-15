@@ -1,4 +1,4 @@
-#' Intraclass Correlation (ICC)
+  #' Intraclass Correlation (ICC)
 #'
 #' @param x A model produced using the `lme4::lmer()` or `lme4::glmer()` functions. This is an object of class `merMod` and subclass `lmerMod` or `glmerMod`.
 #'
@@ -6,7 +6,7 @@
 #'
 #' **Note**: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (1998)[@kreft1998], "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 63). However, Snijders and Bosker (2012) [@snijders2012] offer a calculation to derive this value (equation 7.9). This equation is implemented here.
 #'
-#' The `icc` function only calculates the intraclass correlation for multilevel logistic regression models. Specifically, generalized linear mixed-effect model estimated with the `lme4::glmer` function with `family = binomial(link="logit")`. The estimation method follows Hox et al. (2018, p. 107) recommendation of setting the level-1 residual variance to $\frac{\pi^2}{3}$. For a discussion different methods for estimating the intraclass correlation for binary responses see Wu et al. (2012) [@Wu2012].
+#' The `icc` function calculates the intraclass correlation for linear mixed-effects models estimated with the `lme4::lmer` function or generalized linear mixed-effect model estimated with the `lme4::glmer` function with `family = binomial(link="logit")`. For logistic models, the estimation method follows Hox et al. (2018, p. 107) recommendation of setting the level-1 residual variance to $\frac{\pi^2}{3}$. For a discussion different methods for estimating the intraclass correlation for binary responses see Wu et al. (2012) [@Wu2012].
 #'
 #'
 #' @return A data frame with random effects and their intraclass correlations.
@@ -28,7 +28,7 @@
 #' icc(fit)
 #'
 #' # Logistic Example
-#' #' # Create binary outcome
+#'   # Create binary outcome
 #' hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
 #'
 #' fitb <- glmer(binary_math ~ 1 + ses + catholic + (1|id),

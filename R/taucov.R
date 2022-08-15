@@ -2,9 +2,9 @@
 #'
 #' @description Quickly get the covariance and correlation between intercepts and slopes. By default, `lme4` only displays the correlation.
 #'
-#' @param model
+#' @param model A model fit using the `lme4::lmer` function
 #'
-#' @return A data frame with the intercept, randomly-varying variable, covariance, and correlation.
+#' @return A data frame with the intercept, randomly-varying variables, covariance, and correlation.
 #'
 #' @importFrom lme4 VarCorr
 #'
@@ -18,7 +18,7 @@ taucov <- function(model) {
 
   # get variance components
   var_df <- as.data.frame(lme4::VarCorr(model))
-  var_df <- na.omit(var_df)[2:5]
+  var_df <- na.omit(var_df)
 
 
 
@@ -28,10 +28,12 @@ taucov <- function(model) {
 
 
   # rename columns
-  names(var_df)[3] <- "covariance"
-  names(var_df)[4] <- "correlation"
+  names(var_df)[names(var_df) == "vcov"] <- "covariance"
+  names(var_df)[names(var_df) == "sdcor"] <- "correlation"
   # remove parentheses
   var_df$var1 <- gsub("[()]", "", var_df$var1)
-  return(var_df)
-  }
+  # re-number rows in dataframe
+  rownames(var_df) <- NULL
+  return(print(var_df, digits = 3))
+     }
 }
