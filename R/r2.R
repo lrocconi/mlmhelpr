@@ -181,11 +181,5 @@ r2 <- function(model1, model2 = NULL) {
 
 }
 
-fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=F)
-fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=F)
 
-pve(fit1)
-test_pve <- pve(fit1, fit2)
-name1 <- deparse(substitute(fit1))
-name1 <- quote(name1)
 
