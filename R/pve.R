@@ -24,9 +24,9 @@
 #'pve(fit1, fit2)
 
 
-pve <- function(model1, model2) {
+pve <- function(model1, model2 = NULL) {
 
-  # nesting test
+   # nesting test
   if(nobs(model1) != nobs(model2)){
     stop("Models were not all fitted to the same size of dataset. Models must be nested.")}
 
@@ -136,8 +136,9 @@ pve <- function(model1, model2) {
     names(final)[names(final)=="pve"] <- "variance_explained"
     final <- final[complete.cases(final),]
     #final[,"variance_explained"] <- round(final[,"variance_explained"], round)
+
     return(final)
   }
 
+ }
 
-}
