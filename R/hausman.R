@@ -1,4 +1,4 @@
-#' Hausman Test
+#' Hausman Test (experimental)
 #'
 #' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'

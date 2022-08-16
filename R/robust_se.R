@@ -49,7 +49,7 @@ robust_se <- function(model, type="CR2"){
   # combine CI with parameter estimates
   est <- clubSandwich::coef_test(model, vcov=covmat)
   ci <- clubSandwich::conf_int(model, vcov=covmat)
-  ci <- ci[,c(1, 5, 6)]
+  #ci <- ci[,c(1, 5, 6)]
   ci <- ci[,c("Coef", "CI_L", "CI_U")]
   merge(est, ci, by = "Coef")
 
