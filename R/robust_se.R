@@ -33,7 +33,7 @@ robust_se <- function(model, type="CR2"){
 
   # Check whether model is of class lmerMod
   if(class(model)[1] != "lmerMod" & class(model)[1] != "lmerModLmerTest"){
-    stop("Only models fitted using the `lmer` function are supported.")}
+    stop("Only models fitted using the `lmer` function are supported. See `mlmhelpr::boot_se` for additional options.")}
 
   # Check whether "type" is correctly specified
   types <- c("CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3")

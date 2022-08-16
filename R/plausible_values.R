@@ -2,7 +2,7 @@
 #'
 #' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
-#' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as an integer (e.g., 99, 95, 80). The 95% value range is used by default.
+#' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a whole number (e.g., 99, 95, 80). The 95% value range is used by default.
 #'
 #' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. See @raudenbush2002, p. 71 and @hoffman2015, p. 166.
 #'
