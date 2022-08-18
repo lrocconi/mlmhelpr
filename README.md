@@ -3,7 +3,8 @@
 
 <img src="man/figures/mlmhelpr_hex.png" align="right" height=250/>
 
-A package of multilevel modeling helper functions
+A package of helper functions for multilevel models fit using the `lme4`
+package
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd only -->
 <!-- badges: start -->
@@ -27,18 +28,25 @@ This package is currently under development. Check back later.
 
 ## Functions
 
+### `boot_se`
+
+Compute bootstrap standard errors and confidence intervals for fixed
+effects
+
 ### `center`
 
-Automaticaly grand- or group-mean center and re-estimate models
+Automatically grand- or group-mean center variables and re-estimates the
+model
 
 ### `hausman`
 
 Perform a Hausman test to test for differences between random- and
-fixed-effects models
+fixed-effects models (experimental)
 
 ### `design_effect`
 
-Estimate a design effect to determine if multilevel modeling is needed
+Calculate the design effect to determine if multilevel modeling is
+needed
 
 ### `icc`
 
@@ -46,12 +54,28 @@ Calculate the intraclass correlation
 
 ### `plausible_values`
 
-Calculate the plausible value range of the intercept
+Compute the plausible value range for random effects
 
 ### `pve`
 
-Calculate the percentage of variance explained
+Compute the proportion of variance explained for each random effect in
+the model
 
 ### `r2`
 
-Calculate a global *r*<sup>2</sup> value
+Calculate several
+pseudo-![r^2](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;r%5E2 "r^2")
+values
+
+### `r2_cor`
+
+Calculate the squared correlation between the observed and predicted
+values
+
+### `robust_se`
+
+Computes robust standard errors for `lmer` models
+
+### `taucov`
+
+Calculate correlation between random intercepts and slopes
