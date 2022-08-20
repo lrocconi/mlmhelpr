@@ -2,7 +2,7 @@
 #'
 #' @param x model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
-#' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a whole number (e.g., 99, 95, 80). The 95% value range is used by default.
+#' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a number between 0 and 1 (e.g., .99, .95, .80). The 95% value range (.95) is used by default.
 #'
 #' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. See @raudenbush2002, p. 71 and @hoffman2015, p. 166.
 #'
@@ -20,14 +20,13 @@
 #' plausible_values(fit) #default is 95% range
 #' plausible_values(fit, 99)
 #'
-plausible_values <- function(x, pct=95){
+plausible_values <- function(x, pct=.95){
 
   #get CI
   #convert percentile to z-score
-  if(pct < 1){stop("Percentiles should be written as whole numbers (e.g., 95, 99, 80)")}
-  if(pct >= 100){stop("Percentiles should be less than 100 (e.g., 95, 99, 80)")}
+  if(pct < 0 | pct > 1){stop("Percentiles should be a number between 0 and 1, e.g. .95, .99, .80")}
 
-  tail <- ((100-pct)/2)/100
+  tail <- ((1-pct)/2)/1
   sd <- qnorm(tail,lower.tail=FALSE)
 
   #get T00
