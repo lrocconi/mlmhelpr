@@ -121,9 +121,12 @@ r2 <- function(model1, model2 = NULL) {
     #name2 <- shQuote(name2)
     name2 <- paste0('"',name2,'"')
 
+    print(final)
+
     cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
     cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
-    return(final)
+
+    return(invisible(final))
 
   }
 
@@ -164,10 +167,12 @@ r2 <- function(model1, model2 = NULL) {
     #name2 <- shQuote(name2)
     name2 <- paste0('"',name2,'"')
 
+    print(final)
+
     cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
     cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
 
-    return(final)
+    return(invisible(final))
   }
 
   } else { name1 <- deparse(substitute(model1))
