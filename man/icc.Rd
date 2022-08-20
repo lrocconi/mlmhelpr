@@ -2,20 +2,22 @@
 % Please edit documentation in R/icc.R
 \name{icc}
 \alias{icc}
-\title{ICC (Intraclass Correlation)}
+\title{Intraclass Correlation (ICC)}
 \usage{
 icc(x)
 }
 \arguments{
-\item{x}{A model produced using the \code{lme4::lmer()} function. This is an object of class \code{merMod} and subclass \code{lmerMod}.}
+\item{x}{A model produced using the \code{lme4::lmer()} or \code{lme4::glmer()} functions. This is an object of class \code{merMod} and subclass \code{lmerMod} or \code{glmerMod}.}
 }
 \value{
 A data frame with random effects and their intraclass correlations.
 }
 \description{
-DESCRIPTION
+The \code{icc} function calculates the intraclass correlation (ICC) for multilevel models. The ICC represents the proportion of group-level variance to total variance. The ICC can be calculated for two or more levels in random-intercept models \link{@hox2018}.
 
-\strong{Note}: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (2002), "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 74). However, Snijders and Bosker (YEAR) offer a calculation to derive this value (equation 7.9). This equation is implemented here.
+\strong{Note}: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (1998)\link{@kreft1998}, "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 63). However, Snijders and Bosker (2012) \link{@snijders2012} offer a calculation to derive this value (equation 7.9). This equation is implemented here.
+
+The \code{icc} function calculates the intraclass correlation for linear mixed-effects models estimated with the \code{lme4::lmer} function or generalized linear mixed-effect model estimated with the \code{lme4::glmer} function with \code{family = binomial(link="logit")}. For logistic models, the estimation method follows Hox et al. (2018, p. 107) recommendation of setting the level-1 residual variance to $\frac{\pi^2}{3}$. For a discussion different methods for estimating the intraclass correlation for binary responses see Wu et al. (2012) \link{@Wu2012}.
 }
 \examples{
 fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
@@ -23,11 +25,22 @@ data=hsb, REML=T)
 
 icc(fit)
 
+# Logistic Example
+  # Create binary outcome
+hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
+
+fitb <- glmer(binary_math ~ 1 + ses + catholic + (1|id),
+data=hsb, family = binomial(link="logit"))
+
+icc(fitb)
+
 }
 \references{
 {
 \insertRef{hox2018}{mlmhemlpr}
 \insertRef{kreft2002}{mlmhemlpr}
 \insertRef{snijders2012}{mlmhemlpr}
+\insertRef{Wu2012}{mlmhelpr}
+\insertRef{kreft1998}{mlmhelpr}
 }
 }
