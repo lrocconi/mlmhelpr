@@ -16,7 +16,9 @@
 #'
 #' @importFrom lme4 getME
 #'
-#' @examples#
+#' @export
+#'
+#' @examples
 #'
 #' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
 #' data=hsb, REML=T)
