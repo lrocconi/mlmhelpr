@@ -1,5 +1,3 @@
-load("misc/models.Rdata")
-
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
             data=hsb, REML=T)
 
