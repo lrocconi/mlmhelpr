@@ -11,7 +11,7 @@ fit6 <- lme4::lmer(stress ~ 1 + (1|hospital:ward) + (1|hospital),
                   nurses, REML=F)
 
 test_that("multiplication works", {
-  expect_equal(round(pve(fit, fit2)[1,2],3),
+  expect_equal(round(pve(fit1, fit2)[1,2],3),
                0.447)
   #ml + reml
   expect_message(pve(fit3, fit4))
