@@ -18,8 +18,8 @@ A data frame specifying lower and upper bounds for each fixed effect.
 The plausible values range is useful for gauging the magnitude of variation around fixed effects. See @raudenbush2002, p. 71 and @hoffman2015, p. 166.
 }
 \examples{
-fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-data=hsb, REML=T)
+fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+data=hsb, REML=TRUE)
 
 plausible_values(fit) #default is 95\% range
 plausible_values(fit, 99)
@@ -27,7 +27,7 @@ plausible_values(fit, 99)
 }
 \references{
 {
-\insertRef{hoffman2015}{mlmhemlpr}
-\insertRef{raudenbush2002}{mlmhemlpr}
+\insertCite{hoffman2015}{mlmhelpr}
+\insertCite{raudenbush2002}{mlmhelpr}
 }
 }

@@ -34,8 +34,8 @@ This function refits a model using grand-mean centering, group-mean centering (i
 }
 \examples{
 
-fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-data=hsb, REML=T)
+fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+data=hsb, REML=TRUE)
 
 # Centering a single variable around the grand mean
 fit_gmc <- center(fit, grand_variables="ses")

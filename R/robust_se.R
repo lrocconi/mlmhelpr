@@ -10,12 +10,12 @@
 #'
 #' @importFrom clubSandwich vcovCR coef_test
 #'
-#'
+#' @export
 #'
 #' @examples
 #'
-#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-#' data=hsb, REML=T)
+#' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=TRUE)
 #'
 #' robust_se(fit)
 #' robust_se(fit, type="CR1S")

@@ -19,11 +19,16 @@ BugReports: https://github.com/lrocconi/mlmhelpr/issues
 Depends:
     R (>= 2.10)
 Imports:
-    lme4
+    lme4,
+    stats,
+    utils,
+    clubSandwich,
+    Rdpack,
+    mathjaxr 
+RdMacros: Rdpack, mathjaxr
 Suggests: 
-    testthat (>= 3.0.0)
-Enhances:
-    lme4
+    testthat (>= 3.0.0),
+    knitr
 VignetteBuilder: 
     knitr
 Encoding: UTF-8

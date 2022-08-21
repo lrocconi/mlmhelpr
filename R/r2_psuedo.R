@@ -4,14 +4,14 @@
 #'
 #' @param verbose If true (defualt), prints an explanatory message, "The squared correlation between predicted and observed values is...". If false, returns a value.
 #'
-#' @description The `r2` function estimates a pseudo R-squared by correlating predicted $\hat{Y}$ values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model [@peugh2020; @singer2003, p. 36].
+#' @description The `r2` function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model [@peugh2020; @singer2003, p. 36].
 #'
 #' @return If `verbose == T` (default), a console message. If `verbose == F`, a numeric value.
 #'
 #'
 #' @references{
-#'   \insertRef{peugh2010}{mlmhemlpr}
-#'   \insertRef{singer2003}{mlmhemlpr}
+#'   \insertCite{peugh2010}{mlmhelpr}
+#'   \insertCite{singer2003}{mlmhelpr}
 #' }
 #'
 #' @importFrom lme4 getME
@@ -20,8 +20,8 @@
 #'
 #' @examples
 #'
-#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-#' data=hsb, REML=T)
+#' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=TRUE)
 #'
 #' # returns a console message with the r2 value
 #' r2_cor(fit)

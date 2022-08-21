@@ -7,7 +7,7 @@
 hausman(re_model)
 }
 \arguments{
-\item{x}{model produced using the \code{lme4::lmer()} function. This is an object of class \code{merMod} and subclass \code{lmerMod}.}
+\item{re_model}{model produced using the \code{lme4::lmer()} function. This is an object of class \code{merMod} and subclass \code{lmerMod}.}
 }
 \value{
 an object of class "htest"
@@ -20,14 +20,14 @@ The Hausman test is based on @fox2016, p. 732 (footnote 46). The Hausman test st
 \strong{Note}: The selection of a mixed effect (random effect/multilevel) model should not be solely driven by the Hausman test or any other single statistic. Proper model selection should reflect the research questions and nested nature of the data. In addition, Fox suggests that "the choice between random and fixed effects should reflect our view of the process that generates the data" (p. 732). See also https://stats.stackexchange.com/questions/502811/should-a-hausman-test-be-used-to-decide-between-fixed-vs-random-effects for a discussion of the test and its results.
 }
 \examples{
-fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-data=hsb, REML=T)
+fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+data=hsb, REML=TRUE)
 
 hausman(fit)
 
 }
 \references{
 {
-\insertRef{fox2016}{mlmhemlpr}
+\insertCite{fox2016}{mlmhelpr}
 }
 }

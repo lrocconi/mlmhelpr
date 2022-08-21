@@ -20,15 +20,15 @@ The design effect quantifies the degree a sample deviates from a simple random s
 \strong{Note}: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (1998) \link{@kreft1998}, "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 63). Since the intra-class correlation is part of the design effect calculation, caution is advised when interpreting models with random slopes.
 }
 \examples{
-fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-data=hsb, REML=T)
+fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+data=hsb, REML=TRUE)
 
 design_effect(fit)
 }
 \references{
 {
-\insertRef{hox2018}{mlmhemlpr}
-\insertRef{lai2015}{mlmhemlpr}
-\insertRef{kreft1998}{mlmhelpr}
+\insertCite{hox2018}{mlmhelpr}
+\insertCite{lai2015}{mlmhelpr}
+\insertCite{kreft1998}{mlmhelpr}
 }
 }

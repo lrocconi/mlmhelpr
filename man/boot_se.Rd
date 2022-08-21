@@ -29,7 +29,7 @@ Computes bootstrapped standard errors for fixed effects.
   # Create binary outcome
 hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
 
-fitb <- glmer(binary_math ~ 1 + ses + catholic + (1|id),
+fitb <- lme4::glmer(binary_math ~ 1 + ses + catholic + (1|id),
 data=hsb, family = binomial(link="logit"))
 
 boot_se(fitb)

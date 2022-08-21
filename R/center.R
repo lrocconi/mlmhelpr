@@ -16,12 +16,14 @@
 #'
 #' @return a newly fitted model
 #'
-#' @importFrom lme4
+#' @importFrom lme4 lmer
+#'
+#' @export
 #'
 #' @examples
 #'
-#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-#' data=hsb, REML=T)
+#' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=TRUE)
 #'
 #' # Centering a single variable around the grand mean
 #' fit_gmc <- center(fit, grand_variables="ses")

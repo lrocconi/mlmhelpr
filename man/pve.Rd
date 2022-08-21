@@ -18,14 +18,14 @@ Data frame
 \code{pve} calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate \link{@peugh2020, @raudenbush2002}.
 }
 \examples{
-fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=F)
-fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=F)
+fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=FALSE)
+fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=FALSE)
 
 pve(fit1, fit2)
 }
 \references{
 {
-\insertRef{peugh2010}{mlmhemlpr}
-\insertRef{raudenbush2002}{mlmhemlpr}
+\insertCite{peugh2010}{mlmhelpr}
+\insertCite{raudenbush2002}{mlmhelpr}
 }
 }

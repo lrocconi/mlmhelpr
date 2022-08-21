@@ -9,13 +9,15 @@
 #' @return A data frame specifying lower and upper bounds for each fixed effect.
 #'
 #' @references{
-#'   \insertRef{hoffman2015}{mlmhemlpr}
-#'   \insertRef{raudenbush2002}{mlmhemlpr}
+#'   \insertCite{hoffman2015}{mlmhelpr}
+#'   \insertCite{raudenbush2002}{mlmhelpr}
 #' }
 #'
+#'@export
+#'
 #' @examples
-#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-#' data=hsb, REML=T)
+#' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=TRUE)
 #'
 #' plausible_values(fit) #default is 95% range
 #' plausible_values(fit, 99)

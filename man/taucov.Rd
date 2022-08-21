@@ -17,7 +17,7 @@ Quickly get the covariance and correlation between intercepts and slopes. By def
 }
 \examples{
 
-fit <- lme4::lmer(mathach ~ 1 + ses + (1 + ses|id), data=hsb, REML=T)
+fit <- lme4::lmer(mathach ~ 1 + ses + (1 + ses|id), data=hsb, REML=TRUE)
 
 taucov(fit)
 

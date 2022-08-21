@@ -15,12 +15,12 @@ r2_pseudo(x, verbose = TRUE)
 If \code{verbose == T} (default), a console message. If \code{verbose == F}, a numeric value.
 }
 \description{
-The \code{r2} function estimates a pseudo R-squared by correlating predicted $\hat{Y}$ values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model \link{@peugh2020; @singer2003, p. 36}.
+The \code{r2} function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model \link{@peugh2020; @singer2003, p. 36}.
 }
 \examples{
 
-fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-data=hsb, REML=T)
+fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+data=hsb, REML=TRUE)
 
 # returns a console message with the r2 value
 r2_cor(fit)
@@ -31,7 +31,7 @@ r2_cor(fit, FALSE)
 }
 \references{
 {
-\insertRef{peugh2010}{mlmhemlpr}
-\insertRef{singer2003}{mlmhemlpr}
+\insertCite{peugh2010}{mlmhelpr}
+\insertCite{singer2003}{mlmhelpr}
 }
 }
