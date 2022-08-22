@@ -12,16 +12,18 @@
 #'
 #'
 #' @references{
-#'   \insertRef{hox2018}{mlmhemlpr}
-#'   \insertRef{lai2015}{mlmhemlpr}
-#'   \insertRef{kreft1998}{mlmhelpr}
+#'   \insertCite{hox2018}{mlmhelpr}
+#'   \insertCite{lai2015}{mlmhelpr}
+#'   \insertCite{kreft1998}{mlmhelpr}
 #' }
 #'
 #' @importFrom lme4 ngrps getME
 #'
+#' @export
+#'
 #' @examples
-#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-#' data=hsb, REML=T)
+#' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=TRUE)
 #'
 #' design_effect(fit)
 

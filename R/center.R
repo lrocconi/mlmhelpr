@@ -16,12 +16,14 @@
 #'
 #' @return a newly fitted model
 #'
-#' @importFrom lme4
+#' @importFrom lme4 lmer
+#'
+#' @export
 #'
 #' @examples
 #'
-#' fit <- lmer(mathach ~ 1 + ses + catholic + (1|id),
-#' data=hsb, REML=T)
+#' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+#' data=hsb, REML=TRUE)
 #'
 #' # Centering a single variable around the grand mean
 #' fit_gmc <- center(fit, grand_variables="ses")
@@ -184,7 +186,7 @@ center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL
 
     }
   # refit model ----
-    use_REML <- isREML(x)
+    use_REML <- lme4::isREML(x)
     cat("Model re-fit with centered variables: \n\n")
     if(use_REML == "F" | use_REML == "FALSE") {
       return(lme4::lmer(formula_as_chr, df2, REML=F))

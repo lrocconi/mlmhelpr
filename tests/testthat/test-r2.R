@@ -1,17 +1,18 @@
-library(mlmhelpr)
-
 #test models
-fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
+fit_1 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
                   data=hsb, REML=T)
 
-fit_2 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id) + (ses | catholic),
+fit_2 <- lme4::lmer(mathach ~ 1 + ses + (1|id),
+                    data=hsb, REML=T)
+
+fit_3 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id) + (ses | catholic),
                     data=hsb, REML=F)
 
+x <- r2(fit_1, fit_2)
+round(x[1,2],3)
+
 test_that("R^2 works", {
-  #verbose = F
-  expect_equal(round(r2(fit, F),3), 0.232)
-  expect_equal(round(r2(fit_2, F),3), 0.236)
-  # default, verbose = T
-  expect_equal(capture.output(r2(fit)), "The squared correlation between predicted and observed values is 0.232")
+  expect_equal(round(x[1,2],3), -0.294)
+  expect_equal(capture.output(r2(fit_1)), "The squared correlation between predicted and observed values for \"fit_1\" is 0.232")
 })
 

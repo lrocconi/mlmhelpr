@@ -8,9 +8,11 @@
 #'
 #' @importFrom lme4 VarCorr
 #'
+#' @export
+#'
 #' @examples
 #'
-#' fit <- lme4::lmer(mathach ~ 1 + ses + (1 + ses|id), data=hsb, REML=T)
+#' fit <- lme4::lmer(mathach ~ 1 + ses + (1 + ses|id), data=hsb, REML=TRUE)
 #'
 #' taucov(fit)
 #'

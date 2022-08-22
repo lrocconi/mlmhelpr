@@ -4,23 +4,23 @@
 #'
 #' @param model2 A model produced using the `lme4::lmer()` function. Model1 should be nested within model2. Model2 is usually the full or complete model used to compute the proportional reduction in variance based on model1.
 #'
-#' @description The `r2` function estimates a pseudo R-squared by correlating predicted $\hat{Y}$ values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model [@peugh2020; @singer2003, p. 36]. It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2020, @raudenbush2002].
+#' @description The `r2` function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model [@peugh2020; @singer2003, p. 36]. It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2020, @raudenbush2002].
 #'
 #' @return Statement(s) regarding the squared correlation between predicted and observed values and a data frame
 #'
 #' @references{
-#'   \insertRef{peugh2010}{mlmhemlpr}
-#'   \insertRef{raudenbush2002}{mlmhemlpr}
-#'   \inserRef{singer2003}{mlmhelpr}
+#'   \insertCite{peugh2010}{mlmhelpr}
+#'   \insertCite{raudenbush2002}{mlmhelpr}
+#'   \insertCite{singer2003}{mlmhelpr}
 #' }
 #'
-#' @importFrom lme4 varCorr
+#' @importFrom lme4 VarCorr
 #'
 #' @export
 #'
 #' @examples
-#'fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=F)
-#'fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=F)
+#'fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=FALSE)
+#'fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=FALSE)
 #'
 #' r2(fit2)
 #' r2(fit1, fit2)
@@ -121,9 +121,12 @@ r2 <- function(model1, model2 = NULL) {
     #name2 <- shQuote(name2)
     name2 <- paste0('"',name2,'"')
 
+    print(final)
+
     cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
     cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
-    return(final)
+
+    return(invisible(final))
 
   }
 
@@ -164,10 +167,12 @@ r2 <- function(model1, model2 = NULL) {
     #name2 <- shQuote(name2)
     name2 <- paste0('"',name2,'"')
 
+    print(final)
+
     cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
     cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
 
-    return(final)
+    return(invisible(final))
   }
 
   } else { name1 <- deparse(substitute(model1))

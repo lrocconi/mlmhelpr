@@ -9,17 +9,17 @@
 #' @return Data frame
 #'
 #' @references{
-#'   \insertRef{peugh2010}{mlmhemlpr}
-#'   \insertRef{raudenbush2002}{mlmhemlpr}
+#'   \insertCite{peugh2010}{mlmhelpr}
+#'   \insertCite{raudenbush2002}{mlmhelpr}
 #' }
 #'
-#' @importFrom lme4 varCorr
+#' @importFrom lme4 VarCorr
 #'
 #' @export
 #'
 #' @examples
-#'fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=F)
-#'fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=F)
+#'fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=FALSE)
+#'fit2 <- lme4::lmer(mathach ~ 1 + ses + (1|id), data=hsb, REML=FALSE)
 #'
 #'pve(fit1, fit2)
 
