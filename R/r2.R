@@ -4,7 +4,7 @@
 #'
 #' @param model2 A model produced using the `lme4::lmer()` function. Model1 should be nested within model2. Model2 is usually the full or complete model used to compute the proportional reduction in variance based on model1.
 #'
-#' @description The `r2` function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model [@peugh2020; @singer2003, p. 36]. It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2020, @raudenbush2002].
+#' @description The `r2` function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model [@peugh2020; @singer2003, p. 36]. It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2010, @raudenbush2002].
 #'
 #' @return Statement(s) regarding the squared correlation between predicted and observed values and a data frame
 #'
