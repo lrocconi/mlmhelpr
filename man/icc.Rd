@@ -38,7 +38,6 @@ icc(fitb)
 \references{
 {
 \insertCite{hox2018}{mlmhelpr}
-\insertCite{kreft2002}{mlmhelpr}
 \insertCite{snijders2012}{mlmhelpr}
 \insertCite{Wu2012}{mlmhelpr}
 \insertCite{kreft1998}{mlmhelpr}

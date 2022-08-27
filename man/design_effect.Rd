@@ -15,9 +15,9 @@ design_effect(x, median = FALSE)
 a data frame containing the cluster variable, number of clusters, average (or median) cluster size, intraclass correlation, and the design effect
 }
 \description{
-The design effect quantifies the degree a sample deviates from a simple random sample. In the multilevel modeling context, this can be used to determine whether clustering will bias standard errors and whether the assumption of independence is held. Thus, it can help determine whether multilevel modeling is appropriate for a given data set. The calculations are based on @hox2018 and uses the \code{mlmhelpr:icc} function. A rule of thumb is that design effects smaller than 2 may indicate multilevel modeling is not necessary; however, this is dependent on cluster size and other factors \link{@lai2015}.
+The design effect quantifies the degree a sample deviates from a simple random sample. In the multilevel modeling context, this can be used to determine whether clustering will bias standard errors and whether the assumption of independence is held. Thus, it can help determine whether multilevel modeling is appropriate for a given data set. The calculations are based on @hox2018 and uses the \code{mlmhelpr:icc} function. A rule of thumb is that design effects smaller than 2 may indicate multilevel modeling is not necessary; however, this is dependent on cluster size and other factors (@lai2015).
 
-\strong{Note}: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (1998) \link{@kreft1998}, "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 63). Since the intra-class correlation is part of the design effect calculation, caution is advised when interpreting models with random slopes.
+\strong{Note}: For models with random slopes, it is generally advised to interpret with caution. According to Kreft and De Leeuw (1998)(@kreft1998), "The concept of intra-class correlation is based on a model with a random intercept only. No unique intra-class correlation can be calculated when a random slope is present in the model" (p. 63). Since the intra-class correlation is part of the design effect calculation, caution is advised when interpreting models with random slopes.
 }
 \examples{
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
@@ -27,6 +27,9 @@ design_effect(fit)
 }
 \references{
 {
+\insertRef{hox2018}{mlmhelpr}
+\insertRef{lai2015}{mlmhelpr}
+\insertRef{kreft1998}{mlmhelpr}
 \insertCite{hox2018}{mlmhelpr}
 \insertCite{lai2015}{mlmhelpr}
 \insertCite{kreft1998}{mlmhelpr}
