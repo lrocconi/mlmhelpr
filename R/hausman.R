@@ -4,7 +4,7 @@
 #'
 #' @description The Hausman test tests whether there are significant differences between fixed effect and random effect models with similar specifications. If there is a significant difference, a random effects models (i.e. a multilevel model) *may* be more suitable (efficient). This function takes a model estimated with `lme4::lmer`, automatically re-estimates a fixed effects model, applies the Hausman test, and returns the test statistic and p-value.
 #'
-#' The Hausman test is based on @fox2016, p. 732 (footnote 46). The Hausman test statistic is distributed as chi-square with degrees of freedom equal to the number of coefficients.
+#' The Hausman test is based on (Fox, 2016, p. 732, footnote 46). The Hausman test statistic is distributed as chi-square with degrees of freedom equal to the number of coefficients.
 #'
 #' **Note**: The selection of a mixed effect (random effect/multilevel) model should not be solely driven by the Hausman test or any other single statistic. Proper model selection should reflect the research questions and nested nature of the data. In addition, Fox suggests that "the choice between random and fixed effects should reflect our view of the process that generates the data" (p. 732). See also https://stats.stackexchange.com/questions/502811/should-a-hausman-test-be-used-to-decide-between-fixed-vs-random-effects for a discussion of the test and its results.
 #'
@@ -13,7 +13,7 @@
 #'
 #'
 #' @references{
-#'   \insertCite{fox2016}{mlmhelpr}
+#'   \insertRef{fox2016}{mlmhelpr}
 #' }
 #'
 #' @importFrom lme4 VarCorr fixef

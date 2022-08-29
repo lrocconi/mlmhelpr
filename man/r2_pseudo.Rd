@@ -15,7 +15,7 @@ r2_pseudo(x, verbose = TRUE)
 If \code{verbose == T} (default), a console message. If \code{verbose == F}, a numeric value.
 }
 \description{
-The \code{r2} function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model \link{@peugh2010; @singer2003, p. 36}.
+The \code{r2} function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model (Peugh, 2010; Singer & Willett, 2003, p. 36).
 }
 \examples{
 
@@ -31,7 +31,10 @@ r2_cor(fit, FALSE)
 }
 \references{
 {
-\insertCite{peugh2010}{mlmhelpr}
-\insertCite{singer2003}{mlmhelpr}
+\insertRef{peugh2010}{mlmhelpr}
+}
+
+{
+\insertRef{singer2003}{mlmhelpr}
 }
 }

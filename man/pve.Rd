@@ -15,7 +15,7 @@ pve(model1, model2 = NULL)
 Data frame
 }
 \description{
-\code{pve} calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate \link{@peugh2020, @raudenbush2002}.
+\code{pve} calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate (Peugh, 2010; Raudenbush & Bryk, 2002).
 }
 \examples{
 fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=FALSE)
@@ -25,7 +25,10 @@ pve(fit1, fit2)
 }
 \references{
 {
-\insertCite{peugh2010}{mlmhelpr}
-\insertCite{raudenbush2002}{mlmhelpr}
+\insertRef{peugh2010}{mlmhelpr}
+}
+
+{
+\insertRef{raudenbush2002}{mlmhelpr}
 }
 }

@@ -4,13 +4,16 @@
 #'
 #' @param model2 Current model, produced using the `lme4::lmer()` function.
 #'
-#' @description `pve` calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate [@peugh2020, @raudenbush2002].
+#' @description `pve` calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate (Peugh, 2010; Raudenbush & Bryk, 2002).
 #'
 #' @return Data frame
 #'
 #' @references{
-#'   \insertCite{peugh2010}{mlmhelpr}
-#'   \insertCite{raudenbush2002}{mlmhelpr}
+#'   \insertRef{peugh2010}{mlmhelpr}
+#' }
+#'
+#' @references{
+#'   \insertRef{raudenbush2002}{mlmhelpr}
 #' }
 #'
 #' @importFrom lme4 VarCorr

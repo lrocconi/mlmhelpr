@@ -14,7 +14,7 @@
 #'
 #' @description This function refits a model using grand-mean centering, group-mean centering (if a grouping variable is specified), or centering at a user-specified value
 #'
-#' @return a newly fitted model
+#' @return A newly fitted model with centered variables
 #'
 #' @importFrom lme4 lmer
 #'

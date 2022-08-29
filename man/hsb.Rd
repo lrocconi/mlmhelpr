@@ -20,7 +20,7 @@ A data frame with 7185 rows and 11 variables:
 \item{meanses}{mean SES for each school}
 }
 #' @references{
-\insertCite{raudenbush2002}{mlmhelpr}
+\insertRef{raudenbush2002}{mlmhelpr}
 }
 }
 \source{

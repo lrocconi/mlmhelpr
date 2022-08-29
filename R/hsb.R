@@ -19,7 +19,7 @@
 #'   \item{meanses}{mean SES for each school}
 #' }
 #' #' @references{
-#'   \insertCite{raudenbush2002}{mlmhelpr}
+#'   \insertRef{raudenbush2002}{mlmhelpr}
 #' }
 #' @source \url{https://stats.idre.ucla.edu/other/hlm/hlm-mlm/introduction-to-multilevel-modeling-using-hlm}
 "hsb"

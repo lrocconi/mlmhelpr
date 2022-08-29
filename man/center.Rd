@@ -27,7 +27,7 @@ center(
 \item{value_variables}{Variables to be centered at user-specified value rather than the grand mean}
 }
 \value{
-a newly fitted model
+A newly fitted model with centered variables
 }
 \description{
 This function refits a model using grand-mean centering, group-mean centering (if a grouping variable is specified), or centering at a user-specified value

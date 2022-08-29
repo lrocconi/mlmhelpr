@@ -15,7 +15,7 @@ r2(model1, model2 = NULL)
 Statement(s) regarding the squared correlation between predicted and observed values and a data frame
 }
 \description{
-The \code{r2} function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model \link{@peugh2020; @singer2003, p. 36}. It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate \link{@peugh2010, @raudenbush2002}.
+The \code{r2} function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model (Peugh, 2010; Singer & Willett, 2003, p. 36). It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate (Peugh, 2010; Raudenbush & Bryk, 2002).
 }
 \examples{
 fit1 <- lme4::lmer(mathach ~ 1 + (1|id), data=hsb, REML=FALSE)
@@ -26,8 +26,14 @@ r2(fit1, fit2)
 }
 \references{
 {
-\insertCite{peugh2010}{mlmhelpr}
-\insertCite{raudenbush2002}{mlmhelpr}
-\insertCite{singer2003}{mlmhelpr}
+\insertRef{peugh2010}{mlmhelpr}
+}
+
+{
+\insertRef{raudenbush2002}{mlmhelpr}
+}
+
+{
+\insertRef{singer2003}{mlmhelpr}
 }
 }
