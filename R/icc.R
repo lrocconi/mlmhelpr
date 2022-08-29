@@ -29,8 +29,6 @@
 #'
 #' @importFrom lme4 VarCorr
 #'
-#' @export
-#'
 #' @examples
 #' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 #' data=hsb, REML=TRUE)

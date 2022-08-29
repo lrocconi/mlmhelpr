@@ -34,14 +34,14 @@
 
 r2 <- function(model1, model2 = NULL) {
 
-  r2_model1 <- (cor(predict(model1), lme4::getME(model1, "y")))^2
+  r2_model1 <- (stats::cor(stats::predict(model1), lme4::getME(model1, "y")))^2
 
   if(!is.null(model2)){
 
-  r2_model2 <- (cor(predict(model2), lme4::getME(model2, "y")))^2
+  r2_model2 <- (stats::cor(stats::predict(model2), lme4::getME(model2, "y")))^2
 
   # nesting test
-  if(nobs(model1) != nobs(model2)){
+  if(stats::nobs(model1) != stats::nobs(model2)){
     stop("Models were not all fitted to the same size of dataset. Models must be nested.")}
 
   # Do the models have the same number of random effects?
@@ -141,8 +141,8 @@ r2 <- function(model1, model2 = NULL) {
      sum(is.na(varcorr_df$var2.y)) != nrow(varcorr_df)){
 
     # compute totals for each unique level
-    totalx <-  transform(varcorr_df, totalx= ave(value.x, grp.x, FUN=sum))
-    totaly <-  transform(varcorr_df, totaly= ave(value.y, grp.y, FUN=sum))
+    totalx <-  transform(varcorr_df, totalx= stats::ave(varcorr_df$value.x, varcorr_df$grp.x, FUN=sum))
+    totaly <-  transform(varcorr_df, totaly= stats::ave(varcorr_df$value.y, varcorr_df$grp.y, FUN=sum))
 
     # merge in total files
     varcorr_df <- merge(varcorr_df, totalx[,c("name", "totalx")], by=c("name"), sort=FALSE)
@@ -162,7 +162,7 @@ r2 <- function(model1, model2 = NULL) {
     final <- varcorr_df[,c("name", "pve")]
     names(final)[names(final)=="name"] <- "level"
     names(final)[names(final)=="pve"] <- "variance_explained"
-    final <- final[complete.cases(final),]
+    final <- final[stats::complete.cases(final),]
     #final[,"variance_explained"] <- round(final[,"variance_explained"], round)
 
     # Squared predicted and observed correlation

@@ -22,7 +22,7 @@ fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 data=hsb, REML=TRUE)
 
 plausible_values(fit) #default is 95\% range
-plausible_values(fit, 99)
+plausible_values(fit, .99)
 
 }
 \references{

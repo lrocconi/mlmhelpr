@@ -20,7 +20,7 @@ taucov <- function(model) {
 
   # get variance components
   var_df <- as.data.frame(lme4::VarCorr(model))
-  var_df <- na.omit(var_df)
+  var_df <- stats::na.omit(var_df)
 
 
 

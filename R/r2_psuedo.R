@@ -27,16 +27,16 @@
 #' data=hsb, REML=TRUE)
 #'
 #' # returns a console message with the r2 value
-#' r2_cor(fit)
+#' r2_pseudo(fit)
 #'
 #' # returns a numeric value
-#' r2_cor(fit, verbose = FALSE)
-#' r2_cor(fit, FALSE)
+#' r2_pseudo(fit, verbose = FALSE)
+#' r2_pseudo(fit, FALSE)
 
 
 r2_pseudo <- function(x, verbose=TRUE) {
 
-  r2 <- (cor(predict(x), lme4::getME(x, "y")))^2
+  r2 <- (stats::cor(stats::predict(x), lme4::getME(x, "y")))^2
 
   # return message by default
   if(verbose == TRUE){

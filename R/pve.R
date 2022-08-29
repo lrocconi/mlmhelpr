@@ -116,8 +116,8 @@ pve <- function(model1, model2 = NULL) {
      sum(is.na(varcorr_df$var2.y)) != nrow(varcorr_df)){
 
     # compute totals for each unique level
-    totalx <-  transform(varcorr_df, totalx= stats::ave(value.x, grp.x, FUN=sum))
-    totaly <-  transform(varcorr_df, totaly= stats::ave(value.y, grp.y, FUN=sum))
+    totalx <-  transform(varcorr_df, totalx= stats::ave(varcorr_dr$value.x, varcorr_df$grp.x, FUN=sum))
+    totaly <-  transform(varcorr_df, totaly= stats::ave(varcorr_df$value.y, varcorr_df$grp.y, FUN=sum))
 
     # merge in total files
     varcorr_df <- merge(varcorr_df, totalx[,c("name", "totalx")], by=c("name"), sort=FALSE)
@@ -137,7 +137,7 @@ pve <- function(model1, model2 = NULL) {
     final <- varcorr_df[,c("name", "pve")]
     names(final)[names(final)=="name"] <- "level"
     names(final)[names(final)=="pve"] <- "variance_explained"
-    final <- final[complete.cases(final),]
+    final <- final[stats::complete.cases(final),]
     #final[,"variance_explained"] <- round(final[,"variance_explained"], round)
 
     return(final)

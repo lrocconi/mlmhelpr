@@ -23,7 +23,7 @@
 #' data=hsb, REML=TRUE)
 #'
 #' plausible_values(fit) #default is 95% range
-#' plausible_values(fit, 99)
+#' plausible_values(fit, .99)
 #'
 plausible_values <- function(x, pct=.95){
 
