@@ -12,12 +12,9 @@
 #'
 #'
 #' @references{
-#'   \insertRef{hox2018}{mlmhelpr}
-#'   \insertRef{lai2015}{mlmhelpr}
+#'   \insertRef{hox2018}{mlmhelpr},
+#'   \insertRef{lai2015}{mlmhelpr},
 #'   \insertRef{kreft1998}{mlmhelpr}
-#'   \insertCite{hox2018}{mlmhelpr}
-#'   \insertCite{lai2015}{mlmhelpr}
-#'   \insertCite{kreft1998}{mlmhelpr}
 #' }
 #'
 #' @importFrom lme4 ngrps getME

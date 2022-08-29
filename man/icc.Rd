@@ -21,7 +21,7 @@ The \code{icc} function calculates the intraclass correlation for linear mixed-e
 }
 \examples{
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
-data=hsb, REML=TTRUE)
+data=hsb, REML=TRUE)
 
 icc(fit)
 
