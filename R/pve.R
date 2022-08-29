@@ -30,7 +30,7 @@
 pve <- function(model1, model2 = NULL) {
 
    # nesting test
-  if(nobs(model1) != nobs(model2)){
+  if(stats::nobs(model1) != stats::nobs(model2)){
     stop("Models were not all fitted to the same size of dataset. Models must be nested.")}
 
   # Do the models have the same number of random effects?
@@ -116,8 +116,8 @@ pve <- function(model1, model2 = NULL) {
      sum(is.na(varcorr_df$var2.y)) != nrow(varcorr_df)){
 
     # compute totals for each unique level
-    totalx <-  transform(varcorr_df, totalx= ave(value.x, grp.x, FUN=sum))
-    totaly <-  transform(varcorr_df, totaly= ave(value.y, grp.y, FUN=sum))
+    totalx <-  transform(varcorr_df, totalx= stats::ave(value.x, grp.x, FUN=sum))
+    totaly <-  transform(varcorr_df, totaly= stats::ave(value.y, grp.y, FUN=sum))
 
     # merge in total files
     varcorr_df <- merge(varcorr_df, totalx[,c("name", "totalx")], by=c("name"), sort=FALSE)

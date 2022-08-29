@@ -41,7 +41,7 @@
 #'   # Create binary outcome
 #' hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
 #'
-#' fitb <- glmer(binary_math ~ 1 + ses + catholic + (1|id),
+#' fitb <- lme4::glmer(binary_math ~ 1 + ses + catholic + (1|id),
 #' data=hsb, family = binomial(link="logit"))
 #'
 #' icc(fitb)
@@ -78,7 +78,7 @@ icc <- function(x) {
   #calculate ICC
    for (i in 1:j) {
 
-     if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & family(x)$link == "logit") {
+     if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & stats::family(x)$link == "logit") {
        grp[i] <- varcorr_df[i,"value"] / (sum(varcorr_df[i,"value"]) + ((pi^2)/3))
        icc <- rbind(icc, grp[i])
      }
@@ -96,7 +96,7 @@ icc <- function(x) {
            See ?mlmhelpr::icc() for more information.")}
 
   # if glmer, check link function
-  if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & family(x)$link != "logit")
+  if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & stats::family(x)$link != "logit")
    {message("Warning: Only glmer models with logit link functions supported")}
   # print
   return(iccs)

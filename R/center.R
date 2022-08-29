@@ -140,7 +140,7 @@ center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL
       if(i %in% group_variables){
 
         #make dataframe of means by group
-        means <- aggregate(x=as.numeric(df2[[i]]), by=list(df2[[group]]), FUN=mean)
+        means <- stats::aggregate(x=as.numeric(df2[[i]]), by=list(df2[[group]]), FUN=mean)
 
         #rename columns to aid in merging
         names(means)[1] <- group

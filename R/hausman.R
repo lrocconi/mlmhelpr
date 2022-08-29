@@ -42,7 +42,7 @@ groups <- subset(grps, grps != "Residual")
   #add as.factor() for fe model
 groups$grp <- paste0("as.factor(", groups$grp,")")
   #make it partially a formula
-groups <- capture.output(cat(groups[,1], sep=" + "))
+groups <- utils::capture.output(cat(groups[,1], sep=" + "))
 
 #get fixed effect names ----
   #grab names
@@ -52,7 +52,7 @@ fixed <- fixed[!(fixed %in% "(Intercept)")]
   #remove duplicated names for factors
 fixed <- sub("^(.*)\\1$", "\\1", fixed, perl = TRUE)
   #make it partially a formula
-fixed <- capture.output(cat(fixed, sep=" + "))
+fixed <- utils::capture.output(cat(fixed, sep=" + "))
 
 
 # set intercept
@@ -62,19 +62,19 @@ intercept <- if(fixed[1] == "(Intercept)") {1} else {0}
 dv <- re_model@call[["formula"]][[2]]
 
 #rebuild formula for fe model
-fe_formula <- paste0(dv, " ~ ", capture.output(cat(intercept, fixed, groups, sep=" + ")))
+fe_formula <- paste0(dv, " ~ ", utils::capture.output(cat(intercept, fixed, groups, sep=" + ")))
 
 #estimate model
-fe_model <- lm(fe_formula, data=data)
+fe_model <- stats::lm(fe_formula, data=data)
 
 
 
 # begin hausman test ----
 
-fe_coef <- coef(fe_model)
+fe_coef <- stats::coef(fe_model)
 re_coef <- lme4::fixef(re_model)
-fe_vcov <- vcov(fe_model)
-re_vcov <- vcov(re_model)
+fe_vcov <- stats::vcov(fe_model)
+re_vcov <- stats::vcov(re_model)
 fe_names <- names(fe_coef)
 re_names <- names(re_coef)
 common_coef_names <- re_names[re_names %in% fe_names]
@@ -85,7 +85,7 @@ vcovs <- fe_vcov[coefs, coefs] - re_vcov[coefs, coefs]
 
 z <- as.numeric(abs(t(betas) %*% solve(vcovs) %*% betas))
 df <- length(betas)
-p <- pchisq(z, df, lower.tail = FALSE)
+p <- stats::pchisq(z, df, lower.tail = FALSE)
 
 #prep results
 stat <- z

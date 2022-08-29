@@ -2,13 +2,13 @@
 fit_lmer1 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
             data=hsb, REML=T)
 
-fit_lmer2 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id) + (catholic|ses),
+fit_lmer2 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1 + ses|id),
                         data=hsb, REML=T)
 
 
-fit_lmer3 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id) + (catholic|ses) + (1|ses:id),
-                        data=hsb, REML=T)
-
+hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
+fit_glmer <- lme4::glmer(binary_math ~ 1 + ses + catholic + (1|id),
+                          data=hsb, family = binomial(link="logit"))
 
 fit_lm <- lm(mathach ~ 1 + ses + catholic,
                        data=hsb)
@@ -29,7 +29,7 @@ test_that("design_effect works", {
   # error messages
   expect_error(design_effect(fit_lm))
   expect_message(design_effect(fit_lmer2))
-  expect_message(design_effect(fit_lmer3))
+  expect_error(design_effect(fit_glmer))
 })
 
 

@@ -32,18 +32,18 @@ plausible_values <- function(x, pct=.95){
   if(pct < 0 | pct > 1){stop("Percentiles should be a number between 0 and 1, e.g. .95, .99, .80")}
 
   tail <- ((1-pct)/2)/1
-  sd <- qnorm(tail,lower.tail=FALSE)
+  sd <- stats::qnorm(tail,lower.tail=FALSE)
 
   #get T00
   var_df <- as.data.frame(lme4::VarCorr(x))
-  variance <- subset(var_df, var1 == "(Intercept)")$sdcor
+  variance <- subset(var_df, var_df$var1 == "(Intercept)")$sdcor
 
   #get random effects
   re_df <- as.data.frame(lme4::VarCorr(x))
   #remove residual
-  re_df <- subset(re_df, grp != "Residual")
+  re_df <- subset(re_df, re_df$grp != "Residual")
   #remove covariance
-  re_df <- subset(re_df, is.na(var2))
+  re_df <- subset(re_df, is.na(re_df$var2))
 
   #get fixed effects
   fe_df <- as.data.frame(lme4::fixef(x), optional=TRUE)

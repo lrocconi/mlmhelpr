@@ -37,20 +37,20 @@ boot_se <- function(model, nsim = 5, seed = 1234, pct = 95, ...){
 
   boot_mod <- lme4::bootMer(model, FUN = lme4::fixef, nsim = nsim, seed = seed, .progress = "txt")
   boot_df <- boot_mod$t
-  boot_sd <- as.data.frame(apply(boot_df, 2, sd))
+  boot_sd <- as.data.frame(apply(boot_df, 2, stats::sd))
   fixed_effects <- as.data.frame(boot_mod$t0)
   df <- merge(x=fixed_effects, y=boot_sd, by = "row.names")
   colnames(df) <- c("variable", "estimate", "boot se")
   df$Z = df$estimate / df$`boot se`
-  df$'Pr(>|z|)' =  2*pnorm(-abs(df$Z))
+  df$'Pr(>|z|)' =  2*stats::pnorm(-abs(df$Z))
   df$" " = ifelse(df$'Pr(>|z|)' < .001, "***", ifelse(df$'Pr(>|z|)' < .01, "**", ifelse(df$'Pr(>|z|)' < .05, "*","")))
 
   # CIs
   lower_tail <- ((100-pct)/2)/100
   upper_tail <- 1 - lower_tail
 
-  boot_lowerCI <- as.data.frame(apply(boot_df, 2, function (x) quantile(x, lower_tail)))
-  boot_upperCI <- as.data.frame(apply(boot_df, 2, function (x) quantile(x, upper_tail)))
+  boot_lowerCI <- as.data.frame(apply(boot_df, 2, function (x) stats::quantile(x, lower_tail)))
+  boot_upperCI <- as.data.frame(apply(boot_df, 2, function (x) stats::quantile(x, upper_tail)))
   boot_CI <- merge(boot_lowerCI, boot_upperCI, by = "row.names")
 
   lower_name <- paste0("lower ", pct, "% CI")

@@ -1,7 +1,7 @@
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 data=hsb, REML=T)
 
-fit2 <- lme4::lmer(mathach ~ 1 + ses + catholic + (ses|id),
+fit2 <- lme4::lmer(mathach ~ 1 + ses + catholic + (1 + ses|id),
                   data=hsb, REML=T)
 
 test_that("hausman works", {
