@@ -116,7 +116,7 @@ pve <- function(model1, model2 = NULL) {
      sum(is.na(varcorr_df$var2.y)) != nrow(varcorr_df)){
 
     # compute totals for each unique level
-    totalx <-  transform(varcorr_df, totalx= stats::ave(varcorr_dr$value.x, varcorr_df$grp.x, FUN=sum))
+    totalx <-  transform(varcorr_df, totalx= stats::ave(varcorr_df$value.x, varcorr_df$grp.x, FUN=sum))
     totaly <-  transform(varcorr_df, totaly= stats::ave(varcorr_df$value.y, varcorr_df$grp.y, FUN=sum))
 
     # merge in total files

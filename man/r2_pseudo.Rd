@@ -23,11 +23,11 @@ fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 data=hsb, REML=TRUE)
 
 # returns a console message with the r2 value
-r2_cor(fit)
+r2_pseudo(fit)
 
 # returns a numeric value
-r2_cor(fit, verbose = FALSE)
-r2_cor(fit, FALSE)
+r2_pseudo(fit, verbose = FALSE)
+r2_pseudo(fit, FALSE)
 }
 \references{
 {
