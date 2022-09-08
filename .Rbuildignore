@@ -3,3 +3,6 @@
 ^misc$
 ^data-raw$
 ^LICENSE\.md$
+^tests$
+^models\.Rdata$
+^README\.Rmd$
