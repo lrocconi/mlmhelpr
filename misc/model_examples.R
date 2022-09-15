@@ -157,4 +157,4 @@ model18_reml <- lmer(diameter ~ 1 + (1|plate) + (1|sample), Penicillin, REML = T
 model19_ml <- lmer(y ~ 1 + (1|s) + (1|d)+(1|dept:service), InstEval, REML=F)
 model19_reml <- lmer(y ~ 1 + (1|s) + (1|d)+(1|dept:service), InstEval, REML=T)
 
-# save.image(file="models.Rdata")
+save.image(file="models.Rdata")
