@@ -4,10 +4,10 @@
 \alias{icc}
 \title{Intraclass Correlation (ICC)}
 \usage{
-icc(x)
+icc(model)
 }
 \arguments{
-\item{x}{A model produced using the \code{lme4::lmer()} or \code{lme4::glmer()} functions. This is an object of class \code{merMod} and subclass \code{lmerMod} or \code{glmerMod}.}
+\item{model}{A model produced using the \code{lme4::lmer()} or \code{lme4::glmer()} functions. This is an object of class \code{merMod} and subclass \code{lmerMod} or \code{glmerMod}.}
 }
 \value{
 A data frame with random effects and their intraclass correlations.

@@ -122,7 +122,7 @@ design_effect <- function(x, median = FALSE) {
   # Check for random slopes
   if(sum(!is.na(varcorr_df$var2)) > 0)
     {message("Warning: Random slopes detected! Interpret with caution.\n
-            See ?mlmhelpr::de() for more information.")}
+            See ?mlmhelpr::design_effect() for more information.")}
 
   #return(head(df2, nrow(df2)-1))
   return(df2[df2$cluster_name != "Residual", ])

@@ -1,6 +1,6 @@
-  #' Intraclass Correlation (ICC)
+#' Intraclass Correlation (ICC)
 #'
-#' @param x A model produced using the `lme4::lmer()` or `lme4::glmer()` functions. This is an object of class `merMod` and subclass `lmerMod` or `glmerMod`.
+#' @param model A model produced using the `lme4::lmer()` or `lme4::glmer()` functions. This is an object of class `merMod` and subclass `lmerMod` or `glmerMod`.
 #'
 #' @description The `icc` function calculates the intraclass correlation (ICC) for multilevel models. The ICC represents the proportion of group-level variance to total variance. The ICC can be calculated for two or more levels in random-intercept models (Hox et al, 2018).
 #'
@@ -46,9 +46,9 @@
 #'
 #' @export
 
-icc <- function(x) {
+icc <- function(model) {
 
-   varcorr_df <- as.data.frame(lme4::VarCorr(x))
+   varcorr_df <- as.data.frame(lme4::VarCorr(model))
 
   # this creates full grp names ----
   varcorr_df$name <- ifelse(is.na(varcorr_df$var1),
@@ -76,7 +76,7 @@ icc <- function(x) {
   #calculate ICC
    for (i in 1:j) {
 
-     if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & stats::family(x)$link == "logit") {
+     if(lme4::getME(model, "devcomp")$dims[["GLMM"]] == 1 & stats::family(model)$link == "logit") {
        grp[i] <- varcorr_df[i,"value"] / (sum(varcorr_df[i,"value"]) + ((pi^2)/3))
        icc <- rbind(icc, grp[i])
      }
@@ -94,7 +94,7 @@ icc <- function(x) {
            See ?mlmhelpr::icc() for more information.")}
 
   # if glmer, check link function
-  if(lme4::getME(x, "devcomp")$dims[["GLMM"]] == 1 & stats::family(x)$link != "logit")
+  if(lme4::getME(model, "devcomp")$dims[["GLMM"]] == 1 & stats::family(model)$link != "logit")
    {message("Warning: Only glmer models with logit link functions supported")}
   # print
   return(iccs)
