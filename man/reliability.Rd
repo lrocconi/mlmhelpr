@@ -13,7 +13,7 @@ reliability(model)
 A list with reliability estimates for each random effect
 }
 \description{
-This function computes reliability coefficients for random effects according to Raudenbush and Bryk (2002) and Snijders and Bosker (2012). The reliability coefficient is equal to the proportion of between group variance to total variance: \eqn{\frac{\tau^2}{\tau^2 + {\frac}{\sigma^2}{n_j}}}.
+This function computes reliability coefficients for random effects according to Raudenbush and Bryk (2002) and Snijders and Bosker (2012). The reliability coefficient is equal to the proportion of between group variance to total variance: \eqn{\frac{\tau^2}{\tau^2 + {\frac{\sigma^2}{n_j}}}}.
 The empirical Bayes estimator for the random effect is a weighted combination of the cluster mean and grand mean with the weight given by the reliability of the random effect. We refer to this as a reliability because in classical test theory the ratio of the true score variance, \eqn{\tau^2}, relative to the observed score variance of the sample mean is a reliability.
 A reliability close to 1 puts more weight on the cluster mean while a reliability close to 0 put more weight on the grand mean.
 }

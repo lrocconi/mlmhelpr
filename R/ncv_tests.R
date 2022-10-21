@@ -2,17 +2,31 @@
 #'
 #' @param model a mixed model produced using the `lme4` package and the `lmer()` function. This is an object of class `merMod` and subclass `lmerMod`. Currently, only supports 2-level models.
 #'
-#' @param formula level-1 formula to compute H test. Formula should be of the form \eqn{y ~ x1 + ... + xn | g} where \eqn{y} is the response, \eqn{x1 + ... + xn} the covariates, and \eqn{g} the grouping factor, see `lme4::lmList` for details.
+#' @param formula level-1 formula to compute H test. Formula should be of the form \eqn{y \sim x_1 + ... + x_n \; | \; g} where \eqn{y} is the response, \eqn{x_1 + ... + x_n} are the covariates, and \eqn{g} is the grouping factor, see `lme4::lmList` for details.
 #'
-#' @param verbose return additional statistics including d-values and outliers from H test; adjusted R^2, ANOVA results, and mean residual by cluster for Levene test; and likelihood ratio test for B-P test.
+#' @param verbose return additional statistics including d-values and outliers from H test; adjusted R-squared, ANOVA results, and mean residual by cluster for Levene test; and likelihood ratio test for B-P test.
 #'
-#' @description Computes three different Non-constant variance tests. The H test from Raudenbush and Bryk
+#' @description Computes three different Non-constant variance tests: the H test as discussed in Raudenbush and Bryk (2002, pp. 263-265) and Snijders and Bosker (2012, p. 159-160), an approximate Levene's test discussed by Hox et al. (2018, p. 238), and a variation of the Breusch-Pagan test.
 #'
-#' An approximate Levene's test discussed by Hox
+#' For the H test, the user must specify the level-1 formula. This test computes a standardized measure of dispersion for each level-2 group and detects heteroscedasticity in the form of between-group differences in the level-one residuals variances. The standardized measure of dispersion is based on estimated ordinary least squares residuals in each group.
 #'
-#' Finally, a version of the B-P test discussed by X.
+#' The Levene's test computes a oneway analysis of variance of the level-2 grouping variable on the squared residuals of the model. This test examines whether the variance of the residuals is the same in all groups.
 #'
-#' @return A list containing results from the non-constant variance tests.
+#' The Breusch-Pagan test regresses the squared residuals of the model on the fitted model. A likelihood ratio test is used to compare this model with a with a null model that regresses the squared residuals on an empty model with the same random effects.
+#'
+#' @return A list containing results from the three non-constant variance tests.
+#'
+#' @references{
+#'   \insertRef{hox2018}{mlmhelpr}
+#' }
+#'
+#' @references{
+#'   \insertRef{raudenbush2002}{mlmhelpr}
+#' }
+#'
+#' @references{
+#'   \insertRef{singer2003}{mlmhelpr}
+#' }
 #'
 #' @importFrom lme4 lmList
 #'
@@ -76,7 +90,7 @@ if(!is.null(formula)) {
 resid2 <- stats::residuals(model)^2
 
 
-# Approximate Levene's Test from Hox et al. (2018, p. XX)
+# Approximate Levene's Test from Hox et al. (2018, p. 238)
 
   # extract name of cluster variable
   grp <- as.data.frame(lme4::VarCorr(model))[1,1]

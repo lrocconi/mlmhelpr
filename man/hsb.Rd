@@ -19,9 +19,6 @@ A data frame with 7185 rows and 11 variables:
 \item{himinty}{proportion of minority enrollment}
 \item{meanses}{mean SES for each school}
 }
-#' @references{
-\insertRef{raudenbush2002}{mlmhelpr}
-}
 }
 \source{
 \url{https://stats.idre.ucla.edu/other/hlm/hlm-mlm/introduction-to-multilevel-modeling-using-hlm}
@@ -34,5 +31,10 @@ This data is a modified subsample from the 1982 High School and Beyond Survey an
 }
 \details{
 \strong{Note:} This dataset was imported from an SPSS .sav file using \code{haven} and therefore has variable attributes attached.
+}
+\references{
+{
+\insertRef{raudenbush2002}{mlmhelpr}
+}
 }
 \keyword{datasets}

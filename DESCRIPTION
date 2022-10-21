@@ -22,11 +22,11 @@ Imports:
     lme4,
     stats,
     utils,
-    clubSandwich,
     Rdpack,
     mathjaxr 
 RdMacros: Rdpack, mathjaxr
 Suggests: 
+    clubSandwich,
     testthat (>= 3.0.0),
     knitr
 VignetteBuilder: 

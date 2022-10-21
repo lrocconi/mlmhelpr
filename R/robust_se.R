@@ -4,11 +4,13 @@
 #'
 #' @param type character string specifying the estimation type. Options include "CR0", "CR1", "CR1p", "CR1S", "CR2", or "CR3". Defaults to "CR2". See details in `clubSandwich::vcovCR`.
 #'
-#' @description Implements cluster-robust standard errors from the clubSandwich package.
+#' @description Implements cluster-robust standard errors from the `clubSandwich` package. The `clubSandwich` package is required to use this function. See `mlmhelpr::boot_se` for an alternative.
 #'
 #' @return Data frame and message indicating type of robust standard error requested.
 #'
-#' @importFrom clubSandwich vcovCR coef_test
+#' @references{
+#'   \insertRef{clubSandwich}{mlmhelpr}
+#' }
 #'
 #' @export
 #'
@@ -22,7 +24,8 @@
 #'
 #'
 robust_se <- function(model, type="CR2"){
-  `%notin%` <- Negate(`%in%`)
+
+   `%notin%` <- Negate(`%in%`)
 
   #don't require type to be case sensitive
   type <- toupper(type)

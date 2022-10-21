@@ -15,7 +15,7 @@ plausible_values(x, pct = 0.95)
 A data frame specifying lower and upper bounds for each fixed effect.
 }
 \description{
-The plausible values range is useful for gauging the magnitude of variation around fixed effects. See Raudenbush and Bryk (2002, p. 71) and (Hoffman, 2015, p. 166).
+The plausible values range is useful for gauging the magnitude of variation around fixed effects. For more information, see Raudenbush and Bryk (2002, p. 71) and Hoffman (2015, p. 166).
 }
 \examples{
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),

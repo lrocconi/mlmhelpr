@@ -15,7 +15,7 @@ robust_se(model, type = "CR2")
 Data frame and message indicating type of robust standard error requested.
 }
 \description{
-Implements cluster-robust standard errors from the clubSandwich package.
+Implements cluster-robust standard errors from the \code{clubSandwich} package. The \code{clubSandwich} package is required to use this function. See \code{mlmhelpr::boot_se} for an alternative.
 }
 \examples{
 
@@ -26,4 +26,9 @@ robust_se(fit)
 robust_se(fit, type="CR1S")
 
 
+}
+\references{
+{
+\insertRef{clubSandwich}{mlmhelpr}
+}
 }

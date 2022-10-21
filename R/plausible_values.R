@@ -4,7 +4,7 @@
 #'
 #' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a number between 0 and 1 (e.g., .99, .95, .80). The 95% value range (.95) is used by default.
 #'
-#' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. See Raudenbush and Bryk (2002, p. 71) and (Hoffman, 2015, p. 166).
+#' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. For more information, see Raudenbush and Bryk (2002, p. 71) and Hoffman (2015, p. 166).
 #'
 #' @return A data frame specifying lower and upper bounds for each fixed effect.
 #'

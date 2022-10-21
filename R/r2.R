@@ -1,12 +1,12 @@
-#' Pseudo R-squared Measures: squared correlation between predicted and observed values and proportion of variance explained at each level
+#' Pseudo R-squared Measures
 #'
 #' @param model1 A model produced using the `lme4::lmer()` function. If only model1 is supplied, the squared correlation between predicted and observed values is computed. If both model1 and model2 are supplied, the squared correlation is computed for both models as well as the proportional reduction in variance. In this case, model1 is usually the null or unconditional model.
 #'
 #' @param model2 A model produced using the `lme4::lmer()` function. Model1 should be nested within model2. Model2 is usually the full or complete model used to compute the proportional reduction in variance based on model1.
 #'
-#' @description The `r2` function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed $Y$ values. This pseudo-$R^2$ is similar to the $R^2$ used in OLS regression. It indicates amount of variation in the outcome that is explained by the model (Peugh, 2010; Singer & Willett, 2003, p. 36). It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate (Peugh, 2010; Raudenbush & Bryk, 2002).
+#' @description The `r2` function estimates two pseudo R-squared measures. One pseudo R-squared is computed correlating predicted \eqn{\hat{Y}} values and observed \eqn{Y} values. This pseudo R-squared is similar to the \eqn{R^2} used in OLS regression. It indicates amount of variation in the outcome that is explained by the model (Peugh, 2010; Singer & Willett, 2003, p. 36). It also calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate (Peugh, 2010; Raudenbush & Bryk, 2002).
 #'
-#' @return Statement(s) regarding the squared correlation between predicted and observed values and a data frame
+#' @return Statement(s) regarding the squared correlation between predicted and observed values and a data frame giving the proportion of variance explained at each level.
 #'
 #' @references{
 #'   \insertRef{peugh2010}{mlmhelpr}
