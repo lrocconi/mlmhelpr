@@ -3,8 +3,7 @@
 
 <img src="man/figures/mlmhelpr_hex.png" align="right" height=250/>
 
-A package of helper functions for multilevel models fit using the `lme4`
-package
+The `mlmhelpr` package provides  several helper functions for multilevel models fit using the `lme4`package
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd only -->
 <!-- badges: start -->
@@ -24,7 +23,10 @@ package
 
 ## Installation
 
-This package is currently under development. Check back later.
+To install the latest development version directly from Github, type:
+
+install.packages("remotes")
+remotes::install_github("lrocconi/mlmhelpr")
 
 ## Functions
 
@@ -38,38 +40,42 @@ effects
 Automatically grand- or group-mean center variables and re-estimates the
 model
 
-### `hausman`
-
-Perform a Hausman test to test for differences between random- and
-fixed-effects models (experimental)
-
 ### `design_effect`
 
 Calculate the design effect to determine if multilevel modeling is
 needed
 
+### `hausman`
+
+Perform a Hausman test to test for differences between random- and
+fixed-effects models (experimental)
+
 ### `icc`
 
 Calculate the intraclass correlation
+
+### `ncv_tests`
+
+Computes three different Non-constant variance tests (experimental)
 
 ### `plausible_values`
 
 Compute the plausible value range for random effects
 
-### `pve`
+### `r2_cor`
+
+Calculate the squared correlation between the observed and predicted
+values
+
+### `r2_pve`
 
 Compute the proportion of variance explained for each random effect in
 the model
 
 ### `r2`
 
-Calculate several
+Calculate two
 pseudo-![r^2](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;r%5E2 "r^2")
-values
-
-### `r2_cor`
-
-Calculate the squared correlation between the observed and predicted
 values
 
 ### `robust_se`
