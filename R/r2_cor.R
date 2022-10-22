@@ -2,7 +2,7 @@
 #'
 #' @param x A model produced using the `lme4::lmer()` function. This is an object of class `merMod` and subclass `lmerMod`.
 #'
-#' @param verbose If true (defualt), prints an explanatory message, "The squared correlation between predicted and observed values is...". If false, returns a value.
+#' @param verbose If true (default), prints an explanatory message, "The squared correlation between predicted and observed values is...". If false, returns a value.
 #'
 #' @description The `r2_cor` function estimates a pseudo R-squared by correlating predicted \eqn{\hat{Y}} values and observed \eqn{Y} values. This pseudo R-squared is similar to the \eqn{R^2} used in OLS regression. It indicates amount of variation in the outcome that is explained by the model (Peugh, 2010; Singer & Willett, 2003, p. 36).
 #'

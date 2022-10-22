@@ -1,6 +1,6 @@
 Package: mlmhelpr
 Title: Multilevel/Mixed Model Helper Functions
-Version: 0.1
+Version: 0.1.0
 Authors@R: 
     c(person(given = "Louis",
              family = "Rocconi",
