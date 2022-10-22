@@ -22,7 +22,7 @@ A package of helper functions for multilevel models fit using the `lme4` package
 ## Authors
 
 -   [Louis Rocconi, PhD](https://lrocconi.github.io/)
--   [Anthony Schmidt, PhD](http://www.anthonyschmidt.co)
+-   [Anthony Schmidt, PhD](https://www.anthonyschmidt.co/)
 
 ## Installation
 
