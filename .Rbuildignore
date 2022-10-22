@@ -6,3 +6,4 @@
 ^tests$
 ^models\.Rdata$
 ^README\.Rmd$
+^cran-comments\.md$
