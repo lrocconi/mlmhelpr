@@ -12,7 +12,7 @@
 #'
 #' The Levene's test computes a oneway analysis of variance of the level-2 grouping variable on the squared residuals of the model. This test examines whether the variance of the residuals is the same in all groups.
 #'
-#' The Breusch-Pagan test regresses the squared residuals of the model on the fitted model. A likelihood ratio test is used to compare this model with a with a null model that regresses the squared residuals on an empty model with the same random effects.
+#' The Breusch-Pagan test regresses the squared residuals on the fitted model. A likelihood ratio test is used to compare this model with a with a null model that regresses the squared residuals on an empty model with the same random effects. This test examines whether the variance of the residuals depends on the predictor variables.
 #'
 #' @return A list containing results from the three non-constant variance tests.
 #'
