@@ -21,7 +21,7 @@ A data frame with 7185 rows and 11 variables:
 }
 }
 \source{
-\url{https://stats.idre.ucla.edu/other/hlm/hlm-mlm/introduction-to-multilevel-modeling-using-hlm}
+\url{https://stats.oarc.ucla.edu/other/hlm/hlm-mlm/introduction-to-multilevel-modeling-using-hlm/}
 }
 \usage{
 hsb
