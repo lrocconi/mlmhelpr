@@ -21,5 +21,5 @@
 #' @references{
 #'   \insertRef{raudenbush2002}{mlmhelpr}
 #' }
-#' @source \url{https://stats.idre.ucla.edu/other/hlm/hlm-mlm/introduction-to-multilevel-modeling-using-hlm}
+#' @source \url{https://stats.oarc.ucla.edu/other/hlm/hlm-mlm/introduction-to-multilevel-modeling-using-hlm/}
 "hsb"

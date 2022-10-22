@@ -19,7 +19,7 @@ The `mlmhelpr` package provides  several helper functions for multilevel models 
 ## Authors
 
 -   [Louis Rocconi, PhD](https://lrocconi.github.io/)
--   [Anthony Schmidt, PhD](http://www.anthonyschmidt.co)
+-   [Anthony Schmidt, PhD](http://www.anthonyschmidt.co/)
 
 ## Installation
 
