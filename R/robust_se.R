@@ -20,7 +20,6 @@
 #' data=hsb, REML=TRUE)
 #'
 #' robust_se(fit)
-#' robust_se(fit, type="CR1S")
 #'
 #'
 robust_se <- function(model, type="CR2"){

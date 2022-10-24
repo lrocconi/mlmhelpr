@@ -26,11 +26,6 @@ data=hsb, REML=TRUE)
 reliability(fit)
 
 
-# glmer model
-hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
-fit2 <- lme4::glmer(binary_math ~ 1 + ses + catholic + (1+ses|id),
-                     data=hsb, family = binomial(link="logit"))
-reliability(fit2)
 }
 \references{
 {
