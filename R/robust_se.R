@@ -33,7 +33,7 @@
 #' fitb <- lme4::glmer(binary_math ~ 1 + ses + catholic + (1|id),
 #' data=hsb, family = binomial(link="logit"))
 #'
-#' boot_se(fitb)
+#' robust_se(fitb)
 #' }
 #'
 #'
