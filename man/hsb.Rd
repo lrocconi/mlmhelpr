@@ -14,7 +14,7 @@ A data frame with 7185 rows and 11 variables:
 \item{mathach}{a measure of math achievement}
 \item{size}{school enrollment size}
 \item{catholic}{school sector: public school or catholic school}
-\item{pracad}{proportion of studentd in the academic track}
+\item{pracad}{proportion of students in the academic track}
 \item{disclim}{scale measuring disciplinary climate}
 \item{himinty}{proportion of minority enrollment}
 \item{meanses}{mean SES for each school}

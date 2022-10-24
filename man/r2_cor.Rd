@@ -9,7 +9,7 @@ r2_cor(x, verbose = TRUE)
 \arguments{
 \item{x}{A model produced using the \code{lme4::lmer()} function. This is an object of class \code{merMod} and subclass \code{lmerMod}.}
 
-\item{verbose}{If true (defualt), prints an explanatory message, "The squared correlation between predicted and observed values is...". If false, returns a value.}
+\item{verbose}{If true (default), prints an explanatory message, "The squared correlation between predicted and observed values is...". If false, returns a value.}
 }
 \value{
 If \code{verbose == T} (default), a console message. If \code{verbose == F}, a numeric value.
