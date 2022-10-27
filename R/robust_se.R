@@ -18,22 +18,11 @@
 #'
 #'\dontrun{
 #'
-#' # lmer example
 #' # run time > 5s
 #' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 #' data=hsb, REML=TRUE)
 #'
 #' robust_se(fit)
-#'
-#' # glmer example: logistic example
-#' # run time > 5s
-#'   # Create binary outcome
-#' hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
-#'
-#' fitb <- lme4::glmer(binary_math ~ 1 + ses + catholic + (1|id),
-#' data=hsb, family = binomial(link="logit"))
-#'
-#' robust_se(fitb)
 #' }
 #'
 #'

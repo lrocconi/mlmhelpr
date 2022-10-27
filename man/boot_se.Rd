@@ -25,10 +25,23 @@ Computes bootstrapped standard errors for fixed effects.
 }
 \examples{
 
+# lmer example
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 data=hsb, REML=TRUE)
 
 boot_se(fit)
 
+\dontrun{
+
+# run time > 10s
+# glmer example: logistic
+  # Create binary outcome
+hsb$binary_math <- ifelse(hsb$mathach <= 13, 0, 1)
+
+fitb <- lme4::glmer(binary_math ~ 1 + ses + catholic + (1|id),
+data=hsb, family = binomial(link="logit"))
+
+boot_se(fitb)
+}
 
 }

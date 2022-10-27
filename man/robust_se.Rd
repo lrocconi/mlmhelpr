@@ -19,10 +19,14 @@ Implements cluster-robust standard errors from the \code{clubSandwich} package. 
 }
 \examples{
 
+\dontrun{
+
+# run time > 5s
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 data=hsb, REML=TRUE)
 
 robust_se(fit)
+}
 
 
 }
