@@ -4,6 +4,8 @@
 #'
 #' @param type character string specifying the estimation type. Options include "CR0", "CR1", "CR1p", "CR1S", "CR2", or "CR3". Defaults to "CR2". See details in `clubSandwich::vcovCR`.
 #'
+#' @param pct percentage level for confidence interval. Defaults to 95. Must be specified as a whole number between 1 and 100 (e.g., 99, 95, 80).
+#'
 #' @description Implements cluster-robust standard errors from the `clubSandwich` package. The `clubSandwich` package is required to use this function. See `mlmhelpr::boot_se` for an alternative.
 #'
 #' @return Data frame and message indicating type of robust standard error requested.
@@ -16,7 +18,7 @@
 #'
 #' @examples
 #'
-#'\dontrun{
+#'\donttest{
 #'
 #' # run time > 5s
 #' fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
@@ -26,7 +28,10 @@
 #' }
 #'
 #'
-robust_se <- function(model, type="CR2"){
+robust_se <- function(model, type="CR2", pct = 95){
+
+  if(pct < 1){stop("Percentiles should be written as whole numbers (e.g., 95, 99, 80)")}
+  if(pct >= 100){stop("Percentiles should be less than 100 (e.g., 95, 99, 80)")}
 
    `%notin%` <- Negate(`%in%`)
 
@@ -49,15 +54,27 @@ robust_se <- function(model, type="CR2"){
 
   # compute cluster robust standard errors from clubSandwich package
   covmat <- clubSandwich::vcovCR(model, type=type)
+
   #message(type, " correction used")
-  cat(type, "correction used", "\n\n")
 
   # combine CI with parameter estimates
   est <- clubSandwich::coef_test(model, vcov=covmat)
-  ci <- clubSandwich::conf_int(model, vcov=covmat)
+
+  pct2 <- pct/100
+
+  ci <- clubSandwich::conf_int(model, vcov=covmat, level = pct2)
   #ci <- ci[,c(1, 5, 6)]
   ci <- ci[,c("Coef", "CI_L", "CI_U")]
-  merge(est, ci, by = "Coef")
 
+  lower_name <- paste0("lower_", pct, "%_CI")
+  upper_name <- paste0("upper_", pct, "%_CI")
+
+  colnames(ci) <- c("Coef", lower_name, upper_name)
+
+  coef <- merge(est, ci, by = "Coef")
+
+  output <- list(correction = type, coef = coef)
+
+  return(output)
 }
 

@@ -147,8 +147,6 @@ means <- lapply(means, stats::setNames, nm = grps)
 # remove residual
 means <- lapply(means, function(x) {x[-resid_place]})
 
-
-cat("Reliability Estimates:", "\n\n")
 return(means)
 
 }

@@ -10,9 +10,9 @@
 #'
 #' @param ... additional parameters to pass to `lme4::bootMer`. Not currently implemented.
 #'
-#' @description Computes bootstrapped standard errors for fixed effects.
+#' @description Computes bootstrapped standard errors for fixed effects. z-test returned using a standard normal reference distribution (interpret with caution)
 #'
-#' @return Data frame and message indicating number of bootstrapped samples.
+#' @return A list containing a data frame with coefficient estimates and number of bootstrapped samples.
 #'
 #' @importFrom lme4 bootMer
 #'
@@ -26,7 +26,7 @@
 #'
 #' boot_se(fit)
 #'
-#'\dontrun{
+#'\donttest{
 #'
 #' # run time > 10s
 #' # glmer example: logistic
@@ -74,8 +74,11 @@ boot_se <- function(model, nsim = 5, seed = 1234, pct = 95, ...){
   if(nsim < 1000)
   {message("\n\n", "Warning: Number of boostrapped samples is low. Consider increasing `nsim` to 1000 or larger")}
 
-  cat("\n", "Parametric Bootstrapped Standard Errors","\n","Number of Bootstraps =",nsim, "\n", "z-test returned using a standard normal reference distribution (interpret with caution)", "\n\n")
-  return(df2)
+  #cat("\n", "Parametric Bootstrapped Standard Errors","\n","Number of Bootstraps =",nsim, "\n", "z-test returned using a standard normal reference distribution (interpret with caution)", "\n\n")
+
+  output <- list(nsim = nsim, coef = df2)
+
+  return(output)
 
 }
 

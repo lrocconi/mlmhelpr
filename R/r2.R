@@ -6,7 +6,7 @@
 #'
 #' @param model2 A model produced using the `lme4::lmer()` function. Model1 should be nested within model2. Model2 is usually the full or complete model used to compute the proportional reduction in variance based on model1.
 #'
-#' @return Statement(s) regarding the squared correlation between predicted and observed values and a data frame giving the proportion of variance explained at each level.
+#' @return List containing the squared correlation between predicted and observed values and a data frame containing the proportion of variance explained at each level.
 #'
 #' @references{
 #'   \insertRef{peugh2010}{mlmhelpr}
@@ -127,12 +127,14 @@ r2 <- function(model1, model2 = NULL) {
     #name2 <- shQuote(name2)
     name2 <- paste0('"',name2,'"')
 
-    print(final)
+    #print(final)
 
-    cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
-    cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
+    #cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
+    #cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
 
-    return(invisible(final))
+    output <- list(r2_model_1 = r2_model1, r2_model_2 = r2_model2, pve = final)
+
+    return(output)
 
   }
 
@@ -173,24 +175,29 @@ r2 <- function(model1, model2 = NULL) {
     #name2 <- shQuote(name2)
     name2 <- paste0('"',name2,'"')
 
-    print(final)
+    #print(final)
 
-    cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
-    cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
+    #cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep="")
+    #cat(c("\n","The squared correlation between predicted and observed values for ", name2, " is ", round(r2_model2,3)), "\n\n",sep="")
 
-    return(invisible(final))
+    output <- list(r2_model_1 = r2_model1, r2_model_2 = r2_model2, pve = final)
+
+    return(output)
   }
 
   } else { name1 <- deparse(substitute(model1))
            #name1 <- shQuote(name1)
            name1 <- paste0('"',name1,'"')
 
-    return(cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep=""))
-            }
+    #return(cat(c("The squared correlation between predicted and observed values for ", name1, " is ", round(r2_model1,3)),sep=""))
+    output <- list(r2 = r2_model1)
+           return(output)
+                   }
 
 
 
 }
+
 
 
 

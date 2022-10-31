@@ -6,7 +6,7 @@
 #'
 #' @description `r2_pve` calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate (Peugh, 2010; Raudenbush & Bryk, 2002).
 #'
-#' @return Data frame
+#' @return Data frame containing the proportion of variance explained at each level
 #'
 #' @references{
 #'   \insertRef{peugh2010}{mlmhelpr}
