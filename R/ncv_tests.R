@@ -38,8 +38,9 @@
 #'
 #' ncv_tests(fit)
 #'
-#' ncv_tests(fit, formula = mathach ~ 1 + ses | id, verbose = TRUE)
-#'
+#' # extract outliers from H test
+#' h_test <- ncv_tests(fit, formula = mathach ~ 1 + ses | id, verbose = TRUE)
+#' h_test$outliers
 #'
 ncv_tests <- function(model, formula = NULL, verbose = FALSE ){
 
