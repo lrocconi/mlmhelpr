@@ -32,8 +32,8 @@ fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id), data=hsb, REML=FALSE)
 ncv_tests(fit)
 
 # extract outliers from H test
-h_test <- ncv_tests(fit, formula = mathach ~ 1 + ses | id, verbose = TRUE)
-h_test$outliers
+test <- ncv_tests(fit, formula = mathach ~ 1 + ses | id, verbose = TRUE)
+test$H_test$outliers
 
 }
 \references{
