@@ -3,14 +3,15 @@
 
 <img src="man/figures/mlmhelpr_hex.png" align="right" height=250/>
 
-The `mlmhelpr` package provides  several helper functions for multilevel models fit using the `lme4`package
+A package of helper functions for multilevel models fit using the `lme4`
+package
 
 <!-- README.md is generated from README.Rmd. Please edit README.Rmd only -->
 <!-- badges: start -->
 
 [![](https://www.r-pkg.org/badges/version/mlmhelpr?color=red)](https://cran.r-project.org/package=mlmhelpr)
 [![](https://img.shields.io/badge/status-under%20development-orange.svg)](https://github.com/lrocconi/mlmhelpr)
-[![](https://img.shields.io/badge/devel%20version-0.1-blue.svg)](https://github.com/lrocconi/mlmhelpr)
+[![](https://img.shields.io/badge/devel%20version-0.1.0-blue.svg)](https://github.com/lrocconi/mlmhelpr)
 [![](https://img.shields.io/github/last-commit/lrocconi/mlmhelpr.svg)](https://github.com/lrocconi/mlmhelpr/commits/main)
 [![CodeFactor](https://www.codefactor.io/repository/github/lrocconi/mlmhelpr/badge)](https://www.codefactor.io/repository/github/lrocconi/mlmhelpr)
 
@@ -25,8 +26,9 @@ The `mlmhelpr` package provides  several helper functions for multilevel models 
 
 To install the latest development version directly from Github, type:
 
-install.packages("remotes")
-remotes::install_github("lrocconi/mlmhelpr")
+install.packages(“remotes”)
+
+remotes::install_github(“lrocconi/mlmhelpr”)
 
 ## Functions
 
@@ -72,11 +74,9 @@ values
 Compute the proportion of variance explained for each random effect in
 the model
 
-### `r2`
+### `reliability`
 
-Calculate two
-pseudo-![r^2](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;r%5E2 "r^2")
-values
+Calculate reliability coefficients for random effects
 
 ### `robust_se`
 

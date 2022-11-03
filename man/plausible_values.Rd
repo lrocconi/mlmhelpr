@@ -4,12 +4,12 @@
 \alias{plausible_values}
 \title{Plausible Values Range / Random Effect Confidence Intervals}
 \usage{
-plausible_values(x, pct = 0.95)
+plausible_values(x, pct = 95)
 }
 \arguments{
 \item{x}{model produced using the \code{lme4::lmer()} function. This is an object of class \code{merMod} and subclass \code{lmerMod}.}
 
-\item{pct}{Percentile for the plausible value range, similar to a confidence interval. Must be specified as a number between 0 and 1 (e.g., .99, .95, .80). The 95\% value range (.95) is used by default.}
+\item{pct}{Percentile for the plausible value range, similar to a confidence interval. Must be specified as a whole number between 1 and 100 (e.g., 99, 95, 80). The 95\% value range is used by default.}
 }
 \value{
 A data frame specifying lower and upper bounds for each fixed effect.
@@ -22,7 +22,7 @@ fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
 data=hsb, REML=TRUE)
 
 plausible_values(fit) #default is 95\% range
-plausible_values(fit, .99)
+plausible_values(fit, 99)
 
 }
 \references{

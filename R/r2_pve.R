@@ -41,6 +41,9 @@ r2_pve <- function(model1, model2 = NULL) {
   if(identical(lme4::ngrps(model1), lme4::ngrps(model2)) == FALSE){
     stop("Models do not have the same random effects terms.")}
 
+  if(identical(length(lme4::getME(model1,"theta")), length(lme4::getME(model2,"theta"))) == FALSE){
+    stop("Models do not have the same random effects terms.")}
+
   # Currently, only supports `lmer` function
   if(lme4::getME(model1, "devcomp")$dims[["GLMM"]] == 1 | lme4::getME(model1, "devcomp")$dims[["NLMM"]] == 1)
   {message("Warning: Currently, only `lmer` models are fully supported. Interpret results with caution.")}

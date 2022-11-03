@@ -12,7 +12,7 @@ r2_pve(model1, model2 = NULL)
 \item{model2}{Current model, produced using the \code{lme4::lmer()} function.}
 }
 \value{
-Data frame
+Data frame containing the proportion of variance explained at each level
 }
 \description{
 \code{r2_pve} calculates the proportional reduction in variance explained (PVE) by adding variables to a prior, nested model. The PVE is considered a local effect size estimate (Peugh, 2010; Raudenbush & Bryk, 2002).

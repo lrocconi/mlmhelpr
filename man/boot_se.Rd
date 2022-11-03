@@ -18,10 +18,10 @@ boot_se(model, nsim = 5, seed = 1234, pct = 95, ...)
 \item{...}{additional parameters to pass to \code{lme4::bootMer}. Not currently implemented.}
 }
 \value{
-Data frame and message indicating number of bootstrapped samples.
+A list containing a data frame with coefficient estimates and number of bootstrapped samples.
 }
 \description{
-Computes bootstrapped standard errors for fixed effects.
+Computes bootstrapped standard errors for fixed effects. z-test returned using a standard normal reference distribution (interpret with caution)
 }
 \examples{
 
@@ -31,7 +31,7 @@ data=hsb, REML=TRUE)
 
 boot_se(fit)
 
-\dontrun{
+\donttest{
 
 # run time > 10s
 # glmer example: logistic

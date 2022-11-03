@@ -26,45 +26,61 @@ A package of helper functions for multilevel models fit using the `lme4` package
 
 ## Installation
 
-This package is currently under development. Check back later.
+To install the latest development version directly from Github, type:
+
+install.packages("remotes")
+
+remotes::install_github("lrocconi/mlmhelpr")
+
 
 ## Functions
 
 ### `boot_se`
 
-Compute bootstrap standard errors and confidence intervals for fixed effects 
+Compute bootstrap standard errors and confidence intervals for fixed
+effects
 
 ### `center`
 
-Automatically grand- or group-mean center variables and re-estimates the model
-
-### `hausman`
-
-Perform a Hausman test to test for differences between random- and fixed-effects models (experimental)
+Automatically grand- or group-mean center variables and re-estimates the
+model
 
 ### `design_effect`
 
-Calculate the design effect to determine if multilevel modeling is needed
+Calculate the design effect to determine if multilevel modeling is
+needed
 
-### `icc` 
+### `hausman`
+
+Perform a Hausman test to test for differences between random- and
+fixed-effects models (experimental)
+
+### `icc`
 
 Calculate the intraclass correlation
 
-### `plausible_values` 
+### `ncv_tests`
+
+Computes three different Non-constant variance tests (experimental)
+
+### `plausible_values`
 
 Compute the plausible value range for random effects
 
-### `pve`
-
-Compute the proportion of variance explained for each random effect in the model 
-
-### `r2`
-
-Calculate several pseudo-$r^2$ values
-
 ### `r2_cor`
 
-Calculate the squared correlation between the observed and predicted values
+Calculate the squared correlation between the observed and predicted
+values
+
+### `r2_pve`
+
+Compute the proportion of variance explained for each random effect in
+the model
+
+### `reliability`
+
+Calculate reliability coefficients for random effects
+
 
 ### `robust_se`
 

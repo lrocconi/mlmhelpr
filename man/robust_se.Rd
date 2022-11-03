@@ -4,12 +4,14 @@
 \alias{robust_se}
 \title{Robust Standard Errors}
 \usage{
-robust_se(model, type = "CR2")
+robust_se(model, type = "CR2", pct = 95)
 }
 \arguments{
 \item{model}{model produced using the \code{lme4::lmer()} function. This is an object of class \code{merMod} and subclass \code{lmerMod}.}
 
 \item{type}{character string specifying the estimation type. Options include "CR0", "CR1", "CR1p", "CR1S", "CR2", or "CR3". Defaults to "CR2". See details in \code{clubSandwich::vcovCR}.}
+
+\item{pct}{percentage level for confidence interval. Defaults to 95. Must be specified as a whole number between 1 and 100 (e.g., 99, 95, 80).}
 }
 \value{
 Data frame and message indicating type of robust standard error requested.
@@ -19,7 +21,7 @@ Implements cluster-robust standard errors from the \code{clubSandwich} package. 
 }
 \examples{
 
-\dontrun{
+\donttest{
 
 # run time > 5s
 fit <- lme4::lmer(mathach ~ 1 + ses + catholic + (1|id),
