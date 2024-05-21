@@ -19,8 +19,8 @@ package
 
 ## Authors
 
--   [Louis Rocconi, PhD](https://lrocconi.github.io/)
--   [Anthony Schmidt, PhD](https://www.anthonyschmidt.co/)
+- [Louis Rocconi, PhD](https://lrocconi.github.io/)
+- [Anthony Schmidt, PhD](https://www.anthonyschmidt.co/)
 
 ## Installation
 
