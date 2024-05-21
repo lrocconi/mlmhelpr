@@ -13,7 +13,7 @@ hausman(re_model)
 an object of class "htest"
 }
 \description{
-The Hausman test tests whether there are significant differences between fixed effect and random effect models with similar specifications. If there is a significant difference, a random effects models (i.e. a multilevel model) \emph{may} be more suitable (efficient). This function takes a model estimated with \code{lme4::lmer}, automatically re-estimates a fixed effects model, applies the Hausman test, and returns the test statistic and p-value.
+The Hausman test tests whether there are significant differences between fixed effect and random effect models with similar specifications. If the test statistic is \emph{not} statistically significant, a random effects models (i.e. a multilevel model) \emph{may} be more suitable (efficient). This function takes a model estimated with \code{lme4::lmer}, automatically re-estimates a fixed effects model, applies the Hausman test, and returns the test statistic and p-value.
 
 The Hausman test is based on (Fox, 2016, p. 732, footnote 46). The Hausman test statistic is distributed as chi-square with degrees of freedom equal to the number of coefficients.
 
