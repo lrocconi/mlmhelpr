@@ -27,97 +27,83 @@
 #' hausman(fit)
 #'
 
-hausman <- function(re_model){
+hausman <- function(re_model) {
+  # Extract data from the model
+  data <- re_model@frame
 
-# re-estimate re_model ----
+  # Extract random effect names
+  grps <- as.data.frame(lme4::VarCorr(re_model))[1]
+  groups <- subset(grps, grps != "Residual")
+  groups$grp <- paste0("as.factor(", groups$grp, ")")
+  groups <- utils::capture.output(cat(groups[, 1], sep = " + "))
 
-#get data
-data <- re_model@frame
+  # Extract fixed effect names using terms function
+  fixed_terms <- attr(terms(re_model), "term.labels")
 
-#get random effect names ----
-  #get names
-grps <- as.data.frame(lme4::VarCorr(re_model))[1]
-  #remove residual
-groups <- subset(grps, grps != "Residual")
-  #add as.factor() for fe model
-groups$grp <- paste0("as.factor(", groups$grp,")")
-  #make it partially a formula
-groups <- utils::capture.output(cat(groups[,1], sep=" + "))
+  # Concatenate fixed effect names
+  fixed <- utils::capture.output(cat(fixed_terms, sep = " + "))
 
-#get fixed effect names ----
-  #grab names
-fixed <- names(lme4::fixef(re_model))
-  #remove intercept, if it exists
-fixed <- fixed[!(fixed %in% "(Intercept)")]
-  #remove duplicated names for factors
-fixed <- sub("^(.*)\\1$", "\\1", fixed, perl = TRUE)
-  #make it partially a formula
-fixed <- utils::capture.output(cat(fixed, sep=" + "))
+  # Set intercept
+  intercept <- if ("(Intercept)" %in% fixed_terms) {
+    1
+  } else {
+    0
+  }
 
+  # Rebuild formula for fixed effects model
+  dv <- as.character(re_model@call[["formula"]][[2]])
+  fe_formula <- paste0(dv, " ~ ", intercept, " + ", fixed, " + ", groups)
 
-# set intercept
-intercept <- if(fixed[1] == "(Intercept)") {1} else {0}
+  # Estimate fixed effects model
+  fe_model <- stats::lm(as.formula(fe_formula), data = data)
 
-#get dv
-dv <- re_model@call[["formula"]][[2]]
+  # Begin Hausman test
+  fe_coef <- stats::coef(fe_model)
+  re_coef <- lme4::fixef(re_model)
+  fe_vcov <- stats::vcov(fe_model)
+  re_vcov <- stats::vcov(re_model)
+  fe_names <- names(fe_coef)
+  re_names <- names(re_coef)
+  common_coef_names <- re_names[re_names %in% fe_names]
+  coefs <- common_coef_names[!(common_coef_names %in% "(Intercept)")] # drop intercept if included
 
-#rebuild formula for fe model
-fe_formula <- paste0(dv, " ~ ", utils::capture.output(cat(intercept, fixed, groups, sep=" + ")))
+  betas <- fe_coef[coefs] - re_coef[coefs]
+  vcovs <- fe_vcov[coefs, coefs] - re_vcov[coefs, coefs]
 
-#estimate model
-fe_model <- stats::lm(fe_formula, data=data)
+  z <- as.numeric(abs(t(betas) %*% solve(vcovs) %*% betas))
+  df <- length(betas)
+  p <- stats::pchisq(z, df, lower.tail = FALSE)
 
+  # Prep results
+  stat <- z
+  names(stat) <- "chi-square"
+  parameter <- df
+  names(parameter) <- "df"
+  alpha = .05
 
+  results <- list(statistic  = stat,
+                  p.value      = p,
+                  parameter    = parameter,
+                  method       = "Hausman Test",
+                  data.name    = "hsb"
+  )
+  class(results) <- "htest" # Object of class "htest"
 
-# begin hausman test ----
+  # Check for random slopes
+  varcorr_df <- as.data.frame(lme4::VarCorr(re_model))
+  if (sum(!is.na(varcorr_df$var2)) > 0) {
+    warning("Random slopes detected! Interpret with caution.\nSee ?mlmhelpr::de() for more information.")
+  }
 
-fe_coef <- stats::coef(fe_model)
-re_coef <- lme4::fixef(re_model)
-fe_vcov <- stats::vcov(fe_model)
-re_vcov <- stats::vcov(re_model)
-fe_names <- names(fe_coef)
-re_names <- names(re_coef)
-common_coef_names <- re_names[re_names %in% fe_names]
-coefs <- common_coef_names[!(common_coef_names %in% "(Intercept)")] # drop intercept if included
+  # Caution: might have gotten this backwards!
+  message_text <- if (p < .05) {
+    "\n\nResults are significantly different. \nThe multilevel model may not be suitable."
+  } else {
+    "\n\nResults are not significantly different. \nThe multilevel model may be more suitable."
+  }
 
-betas <- fe_coef[coefs] - re_coef[coefs]
-vcovs <- fe_vcov[coefs, coefs] - re_vcov[coefs, coefs]
-
-z <- as.numeric(abs(t(betas) %*% solve(vcovs) %*% betas))
-df <- length(betas)
-p <- stats::pchisq(z, df, lower.tail = FALSE)
-
-#prep results
-stat <- z
-names(stat) <- "chi-square"
-parameter <- df
-names(parameter) <- "df"
-alpha = .05
-
-results <- list(statistic  = stat,
-            p.value      = p,
-            parameter    = parameter,
-            method       = "Hausman Test",
-            data.name    = "hsb"
-            )
-class(results) <- "htest" #Object of class "htest"
-
-# Check for random slopes
-varcorr_df <- as.data.frame(lme4::VarCorr(re_model))
-if(sum(!is.na(varcorr_df$var2)) > 0)
-{warning("Random slopes detected! Interpret with caution.\nSee ?mlmhelpr::de() for more information.")}
-
-#caution: might have gotten this backwards!
-message_text <- if(p < .05){
-  "\n\nResults are significantly different. \nThe multilevel model may not be suitable."
-} else {
-  "\n\nResults are not significantly different. \nThe multilevel model may be more suitable."
-}
-
-message(message_text)
-return(results)
-
-
+  message(message_text)
+  return(results)
 }
 #
 # # test----
