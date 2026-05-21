@@ -35,14 +35,14 @@
 
 r2_cor <- function(x, verbose=FALSE) {
 
-  r2 <- (stats::cor(stats::predict(x), lme4::getME(x, "y")))^2
+  r2 <- stats::cor(stats::predict(x), lme4::getME(x, "y"), use = "complete.obs")^2
 
   # return message
   if(verbose == TRUE){
-  return(message(c("The squared correlation between predicted and observed values is ", round(r2,3)),sep=""))}
-  # if verbose = F, just return value
-  if(verbose == FALSE){
-  print(r2)}
+  message("The squared correlation between predicted and observed values is ", round(r2,3))
+    }
+
+   return(r2)
 
 }
 

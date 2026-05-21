@@ -12,7 +12,7 @@
 #'
 #' @param value_variables Variables to be centered at user-specified value rather than the grand mean
 #'
-#' @description This function refits a model using grand-mean centering, group-mean centering (if a grouping variable is specified), or centering at a user-specified value
+#' @description This function refits a model using grand-mean centering, group-mean centering (if a grouping variable is specified), or centering at a user-specified value. The function only works for two level models.
 #'
 #' @return A newly fitted model with centered variables
 #'
@@ -40,8 +40,22 @@
 center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL, value=NULL, value_variables = NULL){
 
   # Check whether model is of class lmerMod
-  if(class(x)[1] != "lmerMod" & class(x)[1] != "lmerModLmerTest"){
-    stop("Only models fitted using the `lmer`function are currently supported.")}
+  if(!inherits(x, "lmerMod")){
+    stop("Only models fitted using the `lmer` function are currently supported.")
+  }
+
+  # Check is group variable is also in group_variables
+  if(!is.null(group) && !is.null(group_variables)) {
+    if(group %in% group_variables) {
+      stop(paste0("The grouping variable '", group, "' cannot be included in 'group_variables'. ",
+                  "You cannot group-center the variable that defines the groups."))
+    }
+  }
+
+  # Check if the model has more than 2 levels
+  if(lme4::getME(model, "n_rfacs") > 1) {
+    stop("Only 2-level models currently supported.")
+  }
 
   #get data
   df2 <- x@frame
@@ -58,37 +72,24 @@ center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL
     for(i in colnames(df2)){
       if(i %in% grand_variables){
 
-        df2[[paste0(i, "_grand")]] <-
-          scale(as.numeric(df2[[paste0(i)]]), scale=F)
+        df2[[paste0(i, "_grand")]] <- as.numeric(scale(as.numeric(df2[[i]]), scale=FALSE))
+
       } else {NULL}
     }
-
-    #update formula ----
-    # #get formula
-    # formula <- x@call[["formula"]]
-    # #convert to character vector
-    # formula_as_chr <- Reduce(paste, deparse(formula))
 
     #replace terms
     variables_df <- as.data.frame(grand_variables)
 
     for(i in 1:nrow(variables_df)){
       var_name <- variables_df[i,1]
-      formula_as_chr <- sub(var_name, paste0(var_name, "_grand"),
-                            formula_as_chr)
+
+      formula_as_chr <- gsub(
+        paste0("\\b", var_name, "\\b"),
+        paste0(var_name, "_grand"),
+        formula_as_chr
+      )
+
     }
-
-    #refit model ----
-    # these are important, but have not used them yet
-    # modeltype <- x@call[[1]]
-    # use_REML <- isREML(x)
-    # cat("Model with grand-mean centering: \n\n")
-    # if(use_REML == "F" | use_REML == "FALSE") {
-    #   return(lme4::lmer(formula_as_chr, df2, REML=F))
-    # } else {
-    #   return(lme4::lmer(formula_as_chr, df2, REML=T))
-    # }
-
 
   }
 
@@ -104,32 +105,20 @@ center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL
         } else {NULL}
       }
 
-      #update formula ----
-      # #get formula
-      # formula <- x@call[["formula"]]
-      # #convert to character vector
-      # formula_as_chr <- Reduce(paste, deparse(formula))
-
       #replace terms
       variables_df <- as.data.frame(value_variables)
 
       for(i in 1:nrow(variables_df)){
         var_name <- variables_df[i,1]
-        formula_as_chr <- sub(var_name, paste0(var_name, "_value"),
-                              formula_as_chr)
+
+        formula_as_chr <- gsub(
+          paste0("\\b", var_name, "\\b"),
+          paste0(var_name, "_value"),
+          formula_as_chr
+        )
+
       }
 
-      #refit model ----
-      # these are important, but have not used them yet
-      # modeltype <- x@call[[1]]
-      # use_REML <- isREML(x)
-      # cat("Model with centering on user specified value: \n\n")
-      # if(use_REML == "F" | use_REML == "FALSE") {
-      #   return(lme4::lmer(formula_as_chr, df2, REML=F))
-      # } else {
-      #   return(lme4::lmer(formula_as_chr, df2, REML=T))
-      # }
-      #
   }
 
   #for group-mean centering ----
@@ -139,59 +128,51 @@ center <- function(x, grand_variables = NULL, group=NULL, group_variables = NULL
     for(i in colnames(df2)){
       if(i %in% group_variables){
 
-        #make dataframe of means by group
-        means <- stats::aggregate(x=as.numeric(df2[[i]]), by=list(df2[[group]]), FUN=mean)
+        group_means <- stats::ave(as.numeric(df2[[i]]), df2[[group]], FUN = mean)
+        df2[[paste0(i,"_group_c")]] <- as.numeric(df2[[i]]) - group_means
 
-        #rename columns to aid in merging
-        names(means)[1] <- group
-        names(means)[2] <- paste0(i, "_group_mean")
-
-        #merge
-        df2 <- merge(df2, means)
-
-        #created centered column
-        df2[[paste0(i,"_group_centered")]] <- df2[[i]] - df2[[paste0(i, "_group_mean")]]
-
-        #drop helper column (group)
-        df2 <- df2[,!(names(df2) %in% paste0(i, "_group_mean"))]
-      } else {NULL}
+        # #make dataframe of means by group
+        # means <- stats::aggregate(x=as.numeric(df2[[i]]), by=list(df2[[group]]), FUN=mean)
+        #
+        # #rename columns to aid in merging
+        # names(means)[1] <- group
+        # names(means)[2] <- paste0(i, "_group_mean")
+        #
+        # #merge
+        # df2 <- merge(df2, means, by = group, all.x = TRUE, sort = FALSE)
+        #
+        # #created centered column
+        # df2[[paste0(i,"_group_c")]] <- df2[[i]] - df2[[paste0(i, "_group_mean")]]
+        #
+        # #drop helper column (group)
+        # df2 <- df2[,!(names(df2) %in% paste0(i, "_group_mean"))]
+      }
     }
-
-    #update formula ----
-    # #get formula
-    # formula <- x@call[["formula"]]
-    # #convert to character vecotr
-    # formula_as_chr <- Reduce(paste, deparse(formula))
 
     #replace terms
     variables_df <- as.data.frame(group_variables)
 
     for(i in 1:nrow(variables_df)){
       var_name <- variables_df[i,1]
-      formula_as_chr <- sub(var_name, paste0(var_name, "_group_centered"),
-                            formula_as_chr)
-    }
 
-    # #refit model ----
-    # # these are important, but have not used them yet
-    # modeltype <- x@call[[1]]
-    # use_REML <- isREML(x)
-    # cat("Model with group-mean centering: \n",
-    #     "group = ", group, "\n\n")
-    # if(use_REML == "F" | use_REML == "FALSE") {
-    #   return(lme4::lmer(formula_as_chr, df2, REML=F))
-    # } else {
-    #   return(lme4::lmer(formula_as_chr, df2, REML=T))
-    # }
+
+      formula_as_chr <- gsub(
+        paste0("\\b", var_name, "\\b"),
+        paste0(var_name, "_group_c"),
+        formula_as_chr
+      )
 
     }
-  # refit model ----
+
+    }
+  # refit model
     use_REML <- lme4::isREML(x)
     message("Model re-fit with centered variables.")
-    if(use_REML == "F" | use_REML == "FALSE") {
-      return(lme4::lmer(formula_as_chr, df2, REML=F))
+    formula_obj <- stats::as.formula(formula_as_chr)
+    if(!use_REML) {
+      return(lme4::lmer(formula_obj, df2, REML=FALSE))
     } else {
-      return(lme4::lmer(formula_as_chr, df2, REML=T))
+      return(lme4::lmer(formula_obj, df2, REML=TRUE))
    }
 
 }

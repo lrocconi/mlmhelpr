@@ -59,95 +59,43 @@ if(lme4::getME(model, "devcomp")$dims[["GLMM"]] == 1 & stats::family(model)$link
 {stop("Only glmer models with logit link functions supported")}
 
 
-# add residual variance (pi^2)/3 for logistic models to varcorr_df
-if(lme4::getME(model, "devcomp")$dims[["GLMM"]] == 1 & stats::family(model)$link == "logit") {
-  varcorr_df[nrow(varcorr_df) + 1, ] <- c("Residual",NA,NA,NA,NA,"Residual", as.numeric((pi^2)/3))
-  varcorr_df$value <- as.numeric(varcorr_df$value)
+# OLD formula was appropriate for intercept only models [i.e., tau / (tau + sigma2 / nj)].
+# Revised formula uses EB estimates [reliability = 1 - average_posterior_variance / random_effect_variance]
+
+# Get Emprical Bayes estimates
+re <- lme4::ranef(model, condVar = TRUE)
+
+# loop over each grouping factor and compute reliability
+means <- lapply(names(re), function(g){
+
+  # random effects for grouping factor g
+  re_g <- re[[g]]
+
+  # posterior variance array
+  post_var <- attr(re_g, "postVar")
+
+  # variance-covariance matrix for grouping factor g
+  tau_mat <- as.matrix(lme4::VarCorr(model)[[g]])
+
+  # compute reliability for each random coefficient
+  rel <- rep(NA_real_, ncol(re_g))
+
+  for(i in seq_along(rel)){
+
+    tau_i <- tau_mat[colnames(re_g)[i], colnames(re_g)[i]]
+
+    rel[i] <- 1 - mean(post_var[i, i, ], na.rm = TRUE) / tau_i
   }
 
+  names(rel) <- paste(g, colnames(re_g))
 
-N <- nrow(model@frame) #number of level-1 units
-k <- lme4::ngrps(model) #number of groups
-
-# extract size of each group and save as a dataframe
-nclust <- length(lme4::ngrps(model))
-
-# number of units within each cluster
-nj <- as.data.frame(lme4::getME(model, "flist"))
-
-# save number of units in each cluster as a dataframe
-df <- lapply(nj, FUN = function(x){
-  as.data.frame(table(x))}
-    )
-
-# extact names of random effects and residual
-grps <- varcorr_df[,"name"]
-j <- length(grps) # number of random effects including residual
-
-# the last row is the Residual variance
-resid_place <- nrow(varcorr_df)
-
-
-# loop to compute reliabilities. Formula from Raudenbush & Bryk (2002, p. 46)
-
-compute_reliabilities <- function(x) {
-
-  for (i in 1:j){
-    rxx <- rep(NA, nrow(x))
-    x[, ncol(x) + 1] <- rxx
-    colnames(x)[ncol(x)] <- paste0("rxx", i)
-
-    for (r in 1:nrow(x)) {
-      x[r,paste0("rxx", i)] <- (varcorr_df[i,"value"]) / ((varcorr_df[i,"value"]) + ((varcorr_df[resid_place, "value"]))/x[r,2])
-    }
-  }
-
-  return(x)
-
-}
-
-# apply reliability function to each element of the df list
-df <- lapply(df, FUN = function(x) {compute_reliabilities(x)})
-
-
-
-# compute column means, removing groups and their size
-colnums <- lapply(df, FUN = length)
-
-num <- c()
-
-for (i in 1:length(colnums)) {
-
-  num[i] <- colnums[[i]]
-}
-
-
-for (i in 1:length(df)) {
-
-if(num[i] > 3) {
-
-means <- lapply(df, FUN = function(x) {
-
-  colMeans(x[,-c(1,2)])
-
-  })
-} else {
-
-means <- lapply(df, FUN = function(x){
-
-  mean(x[,-c(1,2)])
+  return(rel)
 })
-}
-}
 
-# use random effect names
-means <- lapply(means, stats::setNames, nm = grps)
-
-
-# remove residual
-means <- lapply(means, function(x) {x[-resid_place]})
+names(means) <- names(re)
 
 return(means)
+
 
 }
 

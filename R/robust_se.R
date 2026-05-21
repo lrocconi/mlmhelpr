@@ -43,13 +43,14 @@ robust_se <- function(model, type="CR2", pct = 95){
      stop("The 'clubSandwich' package must be installed to use this function.")}
 
   # Check whether model is of class lmerMod
-  if(class(model)[1] != "lmerMod" & class(model)[1] != "lmerModLmerTest"){
-    stop("Only models fitted using the `lmer` function are supported. See `mlmhelpr::boot_se` for additional options.")}
+  if(!inherits(model, "lmerMod")){
+    stop("Only models fitted using the `lmer` function are supported. See `mlmhelpr::boot_se` for additional options.")
+  }
 
   # Check whether "type" is correctly specified
   types <- c("CR0", "CR1", "CR1p", "CR1S", "CR2", "CR3")
 
-  if(type %notin% types){
+  if(!(type %in% types)){
     stop("Estimation type must be one of CR0, CR1, CR1p, CR1S, CR2, CR3.\nLeaving this argument blank defaults to CR2.\nSee ?clubSandwich::vcovCR for more information")}
 
   # compute cluster robust standard errors from clubSandwich package
@@ -58,7 +59,8 @@ robust_se <- function(model, type="CR2", pct = 95){
   #message(type, " correction used")
 
   # combine CI with parameter estimates
-  est <- clubSandwich::coef_test(model, vcov=covmat)
+  est <- as.data.frame(clubSandwich::coef_test(model, vcov=covmat))
+  rownames(est) <- NULL
 
   pct2 <- pct/100
 
@@ -71,7 +73,7 @@ robust_se <- function(model, type="CR2", pct = 95){
 
   colnames(ci) <- c("Coef", lower_name, upper_name)
 
-  coef <- merge(est, ci, by = "Coef")
+  coef <- merge(est, ci, by = "Coef", sort = FALSE)
 
   output <- list(correction = type, coef = coef)
 

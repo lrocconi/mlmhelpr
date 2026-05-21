@@ -94,8 +94,10 @@ design_effect <- function(x, median = FALSE) {
     icc <- rbind(icc, grp[i])
   }
 
-  df <- merge(varcorr_df, k, by="grp", all.x=TRUE)
-  df$icc <- icc
+  # attach ICC BEFORE merge for correct alignment
+  varcorr_df$icc <- icc
+
+  df <- merge(varcorr_df, k, by="grp", all.x=TRUE, sort = FALSE)
 
   if (median == TRUE) {
     df$de <- 1 + (md - 1) * df$icc #using median

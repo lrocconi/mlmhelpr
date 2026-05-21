@@ -4,7 +4,7 @@
 #'
 #' @param pct Percentile for the plausible value range, similar to a confidence interval. Must be specified as a whole number between 1 and 100 (e.g., 99, 95, 80). The 95% value range is used by default.
 #'
-#' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. For more information, see Raudenbush and Bryk (2002, p. 71) and Hoffman (2015, p. 166).
+#' @description The plausible values range is useful for gauging the magnitude of variation around fixed effects. For more information, see Raudenbush and Bryk (2002, p. 71) and Hoffman (2015, p. 166). Plausible values ignore covariance and are based on variance of individual coefficients only.
 #'
 #' @return A data frame specifying lower and upper bounds for each fixed effect.
 #'
@@ -32,12 +32,8 @@ plausible_values <- function(x, pct=95){
   if(pct < 1){stop("Percentiles should be written as whole numbers (e.g., 95, 99, 80)")}
   if(pct >= 100){stop("Percentiles should be less than 100 (e.g., 95, 99, 80)")}
 
-  tail <- ((1-(pct/100))/2)/1
+  tail <- ((1-(pct/100))/2)
   sd <- stats::qnorm(tail,lower.tail=FALSE)
-
-  #get T00
-  var_df <- as.data.frame(lme4::VarCorr(x))
-  variance <- subset(var_df, var_df$var1 == "(Intercept)")$sdcor
 
   #get random effects
   re_df <- as.data.frame(lme4::VarCorr(x))
@@ -54,7 +50,7 @@ plausible_values <- function(x, pct=95){
 
   # combine fe and re into one df
 
-  pv_df <- merge(re_df, fe_df, by.x = "var1", by.y="fe_df_rows")
+  pv_df <- merge(re_df, fe_df, by.x = "var1", by.y="fe_df_rows", all.x = TRUE)
 
   # calculations
   pv_df$upper_ci <- pv_df$fixed_effect + (sd*pv_df$sdcor)
@@ -68,6 +64,14 @@ plausible_values <- function(x, pct=95){
 
   colnames(pv) <- c("grp", "var1", lower_name, "fixed_effect", upper_name)
 
-  return(pv)
+  # Give message about random slopes
+    if (any(!is.na(as.data.frame(lme4::VarCorr(x))$var2))) {
+    message(
+      "Random slopes detected: Plausible values ignore covariance and are based on variance of individual coefficients only."
+    )
+  }
+
+
+    return(pv)
 }
 

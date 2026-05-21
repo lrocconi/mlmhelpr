@@ -46,7 +46,7 @@ boot_se <- function(model, nsim = 5, seed = 1234, pct = 95, ...){
 
   boot_mod <- lme4::bootMer(model, FUN = lme4::fixef, nsim = nsim, seed = seed, .progress = "txt")
   boot_df <- boot_mod$t
-  boot_sd <- as.data.frame(apply(boot_df, 2, stats::sd))
+  boot_sd <- as.data.frame(apply(boot_df, 2, stats::sd, na.rm = TRUE))
   fixed_effects <- as.data.frame(boot_mod$t0)
   df <- merge(x=fixed_effects, y=boot_sd, by = "row.names")
   colnames(df) <- c("variable", "estimate", "boot se")
@@ -72,7 +72,7 @@ boot_se <- function(model, nsim = 5, seed = 1234, pct = 95, ...){
 
 
   if(nsim < 1000)
-  {message("\n\n", "Warning: Number of boostrapped samples is low. Consider increasing `nsim` to 1000 or larger")}
+  {message("\n\n", "Warning: Number of boostrap samples is low. Consider increasing `nsim` to 1000 or larger")}
 
   #cat("\n", "Parametric Bootstrapped Standard Errors","\n","Number of Bootstraps =",nsim, "\n", "z-test returned using a standard normal reference distribution (interpret with caution)", "\n\n")
 

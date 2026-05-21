@@ -44,11 +44,14 @@
 #'
 ncv_tests <- function(model, formula = NULL, verbose = FALSE ){
 
-if(class(model)[1] != "lmerMod" & class(model)[1] != "lmerModLmerTest"){
-    stop("Only models fitted using the `lmer`function are supported.")}
+  if(!inherits(model, "lmerMod")){
+    stop("Only models fitted using the `lmer` function are supported.")
+  }
 
-if(getME(model, "n_rfacs") > 1) {
-    stop("Only 2-level models currently supported.")}
+  # Check if the model has more than 2 levels
+  if(lme4::getME(model, "n_rfacs") > 1) {
+    stop("Only 2-level models currently supported.")
+  }
 
 
 # Raudenbush & Bryk's H test
@@ -94,17 +97,18 @@ resid2 <- stats::residuals(model)^2
 # Approximate Levene's Test from Hox et al. (2018, p. 238)
 
   # extract name of cluster variable
-  grp <- as.data.frame(lme4::VarCorr(model))[1,1]
+  grp <- names(lme4::getME(model, "flist"))[1]
 
   # Regress squared residuals on cluster
   # Significance level of ANOVA F indicates heteroscedasticity in residuals across cluster
-  levene <- stats::lm(resid2 ~ get(grp[1]), data = model@frame)
+  levene_formula <- stats::as.formula(paste("resid2 ~", cluster_var_name))
+  levene <- stats::lm(levene_formula, data = model@frame)
   levene_anova <- stats::anova(levene)
   adj_R2 <- summary(levene)$adj.r.squared
 
 
-  agg_means <- stats::aggregate(resid2~get(grp[1]), data=model@frame, FUN=mean)
-  agg_sd <- stats::aggregate(resid2~get(grp[1]), data=model@frame, FUN=stats::sd)
+  agg_means <- stats::aggregate(stats::as.formula(paste("resid2 ~", grp)), data=model@frame, FUN=mean)
+  agg_sd <- stats::aggregate(stats::as.formula(paste("resid2 ~", grp)), data=model@frame, FUN=stats::sd)
 
   levene_test_verbose <- list(F = summary(levene)$fstatistic, p = levene_anova$`Pr(>F)`[1], adj_R2 = adj_R2, anova = levene_anova, mean_resids = agg_means)
   levene_test <- list(F = summary(levene)$fstatistic, p = levene_anova$`Pr(>F)`[1])

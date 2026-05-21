@@ -110,7 +110,6 @@ r2_pve <- function(model1, model2 = NULL) {
     names(final)[names(final)=="name"] <- "level"
     names(final)[names(final)=="pve"] <- "variance_explained"
     #final[,"variance_explained"] <- round(final[,"variance_explained"], round)
-    return(final)
 
   }
 
@@ -129,22 +128,52 @@ r2_pve <- function(model1, model2 = NULL) {
     # compute pve for total levels
     varcorr_df$pve <- (varcorr_df$totalx - varcorr_df$totaly)/varcorr_df$totalx
 
+    # compute pve for intercept
+    idx_int <- which(varcorr_df$var1.x == "(Intercept)" & is.na(varcorr_df$var2.x))
+    varcorr_df$pve[idx_int] <- (varcorr_df$value.x[idx_int] - varcorr_df$value.y[idx_int]) / varcorr_df$value.x[idx_int]
+
+
     # compute pve for random slope
-    varcorr_df[which(varcorr_df$var1.x != "(Intercept)" & is.na(varcorr_df$var2.x)), ]$pve <-
-      (varcorr_df[which(varcorr_df$var1.x != "(Intercept)" & is.na(varcorr_df$var2.x)), ]$value.x -
-         varcorr_df[which(varcorr_df$var1.y != "(Intercept)" & is.na(varcorr_df$var2.y)), ]$value.y) /
-      varcorr_df[which(varcorr_df$var1.x != "(Intercept)" & is.na(varcorr_df$var2.x)), ]$value.x
+    idx_slope <- which(varcorr_df$var1.x != "(Intercept)" & is.na(varcorr_df$var2.x))
+    varcorr_df$pve[idx_slope] <- (varcorr_df$value.x[idx_slope] - varcorr_df$value.y[idx_slope]) / varcorr_df$value.x[idx_slope]
+
+    # row totals
+    totals <- unique(data.frame(
+      level = paste0(unique(varcorr_df$grp.x), " (Intercept)"),
+      variance_explained = (unique(varcorr_df$totalx) - unique(varcorr_df$totaly)) / unique(varcorr_df$totalx)
+    ))
+
+  # save row totals
+    total_rows <- unique(data.frame(
+      level = paste0(varcorr_df$grp.x, " (Total)"),
+      variance_explained = (varcorr_df$totalx - varcorr_df$totaly)/varcorr_df$totalx
+    ))
+
 
     #clean up to display
     varcorr_df <- varcorr_df[is.na(varcorr_df$var2.x) | is.na(varcorr_df$var2.y), ]
+
     final <- varcorr_df[,c("name", "pve")]
     names(final)[names(final)=="name"] <- "level"
     names(final)[names(final)=="pve"] <- "variance_explained"
-    final <- final[stats::complete.cases(final),]
-    #final[,"variance_explained"] <- round(final[,"variance_explained"], round)
 
-    return(final)
+    final <- final[stats::complete.cases(final),]
+
+
+    final <- final[final$level != "Residual (Intercept)", ]
+
+    total_rows <- total_rows[!duplicated(total_rows$level) & total_rows$level != "Residual (Total)", ]
+    final <- rbind(final, total_rows)
+
+
   }
+
+  # check for negative variance explained
+  if (any(final$variance_explained < 0, na.rm = TRUE)) {
+    warning("Some variance explained values are negative. Check that models are entered in the correct order (baseline model first, extended model second). Interpret negative values as 0 variance explained.", call. = FALSE)
+  }
+
+  return(final)
 
  }
 

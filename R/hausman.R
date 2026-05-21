@@ -70,7 +70,7 @@ hausman <- function(re_model) {
   betas <- fe_coef[coefs] - re_coef[coefs]
   vcovs <- fe_vcov[coefs, coefs] - re_vcov[coefs, coefs]
 
-  z <- as.numeric(abs(t(betas) %*% solve(vcovs) %*% betas))
+  z <- as.numeric(abs(t(betas) %*% solve(vcovs, tol = 1e-10) %*% betas))
   df <- length(betas)
   p <- stats::pchisq(z, df, lower.tail = FALSE)
 
@@ -85,7 +85,7 @@ hausman <- function(re_model) {
                   p.value      = p,
                   parameter    = parameter,
                   method       = "Hausman Test",
-                  data.name    = "hsb"
+                  data.name    = deparse(substitute(re_model))
   )
   class(results) <- "htest" # Object of class "htest"
 
@@ -95,14 +95,16 @@ hausman <- function(re_model) {
     warning("Random slopes detected! Interpret with caution.\nSee ?mlmhelpr::de() for more information.")
   }
 
-  # Caution: might have gotten this backwards!
+  # Interpret results
   message_text <- if (p < .05) {
-    "\n\nResults are significantly different. \nThe multilevel model may not be suitable."
+    "\n\nResults are significantly different. \nFixed effects model may be more suitable."
   } else {
     "\n\nResults are not significantly different. \nThe multilevel model may be more suitable."
   }
 
-  message(message_text)
+  beta_msg <- "\n[Note: This Hausman test implementation is in beta and should be interpreted cautiously.]"
+
+  message(paste(message_text, beta_msg, sep = "\n"))
   return(results)
 }
 #
